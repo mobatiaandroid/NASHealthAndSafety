@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NASHealthAndSafety</string>
+    <string name="name_text_caps">NAME</string>
+    <string name="email_text_caps">EMAIL-ID</string>
+    <string name="mobile_text_caps">MOBILE NUMBER</string>
+    <string name="text_ok">OK</string>
+    <string name="text_create_account_description">Create profile and start using NAS Dubai Teachers mobile application</string>
+    <string name="text_network_error">Network Error</string>
+    <string name="text_invalid_cred">Invalid username or password</string>
+    <string name="text_field_missing">Field missing</string>
+    <string name="text_login_success">Login Successful</string>
+    <string name="text_unknown_error">Some error occurred.</string>
+    <string name="text_welcome_back">Welcome Back!</string>
+    <string name="text_welcome_back_description">Login to your NAS H&amp;S mobile application</string>
+    <string name="text_select">Please select</string>
+    <string name="text_select_session">Please select session</string>
+    <string name="text_select_subject">Please select subject</string>
+</resources>

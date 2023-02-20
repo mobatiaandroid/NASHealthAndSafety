@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_corner_radius">16dp</dimen>
+    <dimen name="half_action_bar">28dp</dimen>
+    <dimen name="three_quarter_action_bar">42dp</dimen>
+</resources>
