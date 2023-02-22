@@ -73,10 +73,10 @@ class CreateAccountActivity : AppCompatActivity() {
             })
         }
         createAccount.setOnClickListener {
-            if (emailID.text.toString().equals("")){
+            if (emailID.text.toString() == "") {
                 AppUtils.showMessagePopUp(context, "Field cannot be left empty.")
                 createAccount.setBackgroundResource(R.drawable.create_account_disabled)
-            } else{
+            } else {
                 createAccount.setBackgroundResource(R.drawable.rounded_sign_in)
                 val emailPattern = AppUtils.isEmailValid(emailID.text.toString())
                 if (!emailPattern) {

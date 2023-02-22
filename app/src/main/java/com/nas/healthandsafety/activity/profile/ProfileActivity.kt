@@ -125,11 +125,10 @@ class ProfileActivity : AppCompatActivity() {
                 })
             }
             submit.setOnClickListener {
-                if (currentPassword.text.toString().equals("") || newPassword.text.toString()
-                        .equals("") || confirmPassword.text.toString().equals("")
+                if (currentPassword.text.toString() == "" || newPassword.text.toString() == "" || confirmPassword.text.toString() == ""
                 ) {
                     AppUtils.showMessagePopUp(context, "Field cannot be empty.")
-                } else if (!newPassword.text.toString().equals(confirmPassword.text.toString())) {
+                } else if (newPassword.text.toString() != confirmPassword.text.toString()) {
                     AppUtils.showMessagePopUp(context, "Passwords do not match")
                 } else {
 //                    TODO
