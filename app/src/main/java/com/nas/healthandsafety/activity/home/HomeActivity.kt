@@ -11,9 +11,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.evacuation.StudentEvacuationActivity
+import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
@@ -51,6 +53,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var area: TextView
     lateinit var slider: SlideToActView
     lateinit var evacuateButton: View
+    lateinit var fireMarshall: FloatingActionButton
 
     //    lateinit var presentStudentList: ArrayList<com.nas.fireevacuation.activity.staff_home.model.students_model.Lists>
 //    lateinit var absentStudentList: ArrayList<com.nas.fireevacuation.activity.staff_home.model.students_model.Lists>
@@ -82,6 +85,7 @@ class HomeActivity : AppCompatActivity() {
         context = this
         progressBarDialog = ProgressBarDialog(context)
         attendenceButton = findViewById(R.id.attendence)
+        fireMarshall = findViewById(R.id.fireMarshallButton)
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
         staffName = findViewById(R.id.staffName)
@@ -105,6 +109,12 @@ class HomeActivity : AppCompatActivity() {
 //    var slideCompleteListener: OnSlideCompleteListener
 //    presentStudentList = ArrayList()
 //    absentStudentList = ArrayList()
+        fireMarshall.setOnClickListener {
+            val intent = Intent(context, FireMarshallHomeActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
         gallery.setOnClickListener {
             val intent = Intent(context, GalleryActivity::class.java)
             startActivity(intent)

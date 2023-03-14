@@ -19,6 +19,7 @@ import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.home.HomeActivity
+import com.nas.healthandsafety.activity.welcome.WelcomeActivity
 import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
@@ -164,6 +165,10 @@ class ProfileActivity : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, id ->
 //                    TODO
 //                    signOutCall()
+                    val intent = Intent(context, WelcomeActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
                 }
                 .setNegativeButton(
                     "No"
