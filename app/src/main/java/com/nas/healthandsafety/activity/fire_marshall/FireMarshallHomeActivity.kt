@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -14,12 +15,14 @@ import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.profile.ProfileActivity
+import com.nas.healthandsafety.activity.report.ReportActivity
 
 class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var attendenceButton: ImageView
     lateinit var myProfile: ImageView
     lateinit var gallery: ImageView
+    lateinit var reports: Button
 
     //    lateinit var extras: Bundle
 //    lateinit var classID: String
@@ -49,6 +52,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         attendenceButton = findViewById(R.id.attendence)
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
+        reports = findViewById(R.id.button) as Button
 //        staffName = findViewById(R.id.staffName)
 //        imageA = findViewById(R.id.imageA)
 //        imageB = findViewById(R.id.imageB)
@@ -69,6 +73,12 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         evacuateButton = findViewById(R.id.evacuateButton)
         gallery.setOnClickListener {
             val intent = Intent(context, GalleryActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
+        reports.setOnClickListener {
+            val intent = Intent(context, ReportActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()

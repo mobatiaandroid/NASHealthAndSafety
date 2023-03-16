@@ -18,6 +18,7 @@ import android.view.Window
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.nas.healthandsafety.R
+import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.register.CreateAccountActivity
 import com.nas.healthandsafety.activity.login.model.LoginResponseModel
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
@@ -127,15 +128,27 @@ class SignInActivity : AppCompatActivity() {
                     if (password.text.toString().equals("")) {
                         AppUtils.showMessagePopUp(context, "Field cannot be empty.")
                     } else {
+                        Log.e("email",emailID.text.toString())
+                        if (emailID.text.toString().equals("marshal@mobatia.com")){
+                            val intent = Intent(context, FireMarshallHomeActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(0, 0)
+                            finish()
+                        }else{
 
-                        if (AppUtils.isInternetAvailable(context)) {
-                        // login API\
-                            callLoginApi(emailID.text.toString(),password.text.toString())
-                        } else {
-                            AppUtils.showNetworkErrorPopUp(
-                                context
-                            )
+                            if (AppUtils.isInternetAvailable(context)) {
+                                // login API\
+
+                                callLoginApi(emailID.text.toString(),password.text.toString())
+
+
+                            } else {
+                                AppUtils.showNetworkErrorPopUp(
+                                    context
+                                )
+                            }
                         }
+
 
                     }
                 }
