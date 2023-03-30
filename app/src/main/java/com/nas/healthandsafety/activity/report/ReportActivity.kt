@@ -1,5 +1,6 @@
 package com.nas.healthandsafety.activity.report
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -22,11 +23,19 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import com.nas.healthandsafety.R
+import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 
 class ReportActivity : AppCompatActivity() {
 
     private lateinit var chart: PieChart
     private lateinit var chart2: PieChart
+
+    override fun onBackPressed() {
+        val intent = Intent(this, FireMarshallHomeActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
