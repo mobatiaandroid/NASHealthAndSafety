@@ -109,6 +109,7 @@ class HomeActivity : AppCompatActivity() {
 //    var slideCompleteListener: OnSlideCompleteListener
 //    presentStudentList = ArrayList()
 //    absentStudentList = ArrayList()
+        Log.e("token", PreferenceManager.getFCMID(context))
         fireMarshall.setOnClickListener {
             val intent = Intent(context, FireMarshallHomeActivity::class.java)
             startActivity(intent)

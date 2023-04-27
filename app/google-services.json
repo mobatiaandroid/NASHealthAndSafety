@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "630336221705",
+    "firebase_url": "https://nais-dubai-fire-evacuation-default-rtdb.firebaseio.com",
+    "project_id": "nais-dubai-fire-evacuation",
+    "storage_bucket": "nais-dubai-fire-evacuation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630336221705:android:691377607608c53edc3ed8",
+        "android_client_info": {
+          "package_name": "com.nas.healthandsafety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630336221705-cs1ta49cd3v9mlbv2c9fc44ssplvdnnm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVZk59PyEVNzvUd1b9M-1wLS7iEuT1iE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630336221705-cs1ta49cd3v9mlbv2c9fc44ssplvdnnm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

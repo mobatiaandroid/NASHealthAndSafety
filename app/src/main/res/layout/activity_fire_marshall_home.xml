@@ -61,6 +61,17 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.2" />
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/cardview2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline14">
+
+    </ScrollView>
+
+
     <DigitalClock
         android:id="@+id/clock"
         android:layout_width="256sp"
@@ -95,17 +106,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16sp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/dotted_rectangle_black"
         app:layout_constraintBottom_toTopOf="@+id/cardview2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -247,6 +261,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -384,6 +399,24 @@
 
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.github.lzyzsd.circleprogress.ArcProgress
+            android:id="@+id/arc_progress"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
+            android:layout_centerInParent="true"
+            app:arc_bottom_text="Evacuated"
+            app:arc_finished_color="@color/green"
+            app:arc_progress="24"
+            app:arc_stroke_width="24dp"
+            app:arc_text_color="@color/pink"
+            app:arc_unfinished_color="@color/pink"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

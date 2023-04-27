@@ -9,7 +9,7 @@ class PreferenceManager {
         private const val sharedPrefNas = "NAS_EVAC"
         fun setAccessToken(context: Context, accessToken: String) {
             val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("access_token", accessToken)
             editor.apply()
@@ -23,7 +23,7 @@ class PreferenceManager {
         }
         fun setStaffName(context: Context, staffName: String) {
             val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("staff_name", staffName)
             editor.apply()
@@ -37,11 +37,12 @@ class PreferenceManager {
         }
         fun setStaffID(context: Context, staffID: String) {
             val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("staff_id", staffID)
             editor.apply()
         }
+
         fun getStaffID(context: Context?): String {
             val staffID: String
             val sharedPreferences: SharedPreferences =
@@ -49,8 +50,24 @@ class PreferenceManager {
             staffID = sharedPreferences.getString("staff_id", "").toString()
             return staffID
         }
-        fun setIsFireMarshall(context: Context, value: Boolean)
-        {
+
+        fun setFCMID(context: Context, staffID: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putString("fcm_id", staffID)
+            editor.apply()
+        }
+
+        fun getFCMID(context: Context?): String {
+            val staffID: String
+            val sharedPreferences: SharedPreferences =
+                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+            staffID = sharedPreferences.getString("fcm_id", "").toString()
+            return staffID
+        }
+
+        fun setIsFireMarshall(context: Context, value: Boolean) {
             val prefs = context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor = prefs.edit()
             editor.putBoolean("fire_marshall", value)
@@ -77,7 +94,7 @@ class PreferenceManager {
         }
         fun setClassName(context: Context, className: String) {
             val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("class_name", className)
             editor.apply()
@@ -180,7 +197,7 @@ class PreferenceManager {
 //        }
         fun setAssemblyPoint(context: Context, assemblyPoint: String) {
             val sharedPreferences: SharedPreferences =
-                context!!.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
+                context.getSharedPreferences(sharedPrefNas, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putString("assemblyPoint", assemblyPoint)
             editor.apply()
