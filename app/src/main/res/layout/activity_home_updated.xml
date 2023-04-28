@@ -365,6 +365,7 @@
                 android:layout_margin="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/evacuateButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/assemblyAreaSelector">
 
                 <!--                <com.marvel999.acr.ArcProgress-->
@@ -546,14 +547,14 @@
 
             <ImageView
                 android:id="@+id/imageView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/attendence"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/home_icon_selected" />
+                app:srcCompat="@drawable/home_selected_pink_round_64" />
 
             <ImageView
                 android:id="@+id/attendence"

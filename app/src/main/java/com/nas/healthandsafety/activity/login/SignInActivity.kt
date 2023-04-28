@@ -1,12 +1,10 @@
 package com.nas.healthandsafety.activity.login
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,12 +13,16 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.*
-import androidx.core.content.ContextCompat
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
-import com.nas.healthandsafety.activity.register.CreateAccountActivity
 import com.nas.healthandsafety.activity.login.model.LoginResponseModel
+import com.nas.healthandsafety.activity.register.CreateAccountActivity
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
 import com.nas.healthandsafety.activity.welcome.WelcomeActivity
 import com.nas.healthandsafety.constants.ApiClient
@@ -42,6 +44,7 @@ class SignInActivity : AppCompatActivity() {
     lateinit var staffName: String
     lateinit var staffID: String
     lateinit var recoverAccount: TextView
+    lateinit var isMarshal: String
     var progressBarDialog: ProgressBarDialog? = null
     var passwordShowHide:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,7 +200,7 @@ class SignInActivity : AppCompatActivity() {
                                 staffID = signInResponse.data.staff_id.toString()
                                 PreferenceManager.setAccessToken(context, signInResponse.data.token)
                                 PreferenceManager.setStaffID(context, staffID)
-
+                                isMarshal = signInResponse.data.is_martial
                                 showLoginSuccessPopUp(context,getString(R.string.text_login_success))
                                 // staff name ??
                                 // staff name to pref ??
@@ -241,10 +244,18 @@ class SignInActivity : AppCompatActivity() {
             val text = dialog.findViewById<View>(R.id.textDialog) as TextView
             val button = dialog.findViewById<View>(R.id.okButton) as Button
             button.setOnClickListener {
-                val intent = Intent(context, SessionSelectActivity::class.java)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
-                finish()
+                if (isMarshal == "1") {
+                    val intent = Intent(context, FireMarshallHomeActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                } else {
+                    val intent = Intent(context, SessionSelectActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                }
+
             }
             text.text = message
             dialog.show()
