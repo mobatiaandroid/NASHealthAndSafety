@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
+import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.activity.welcome.WelcomeActivity
@@ -54,6 +55,9 @@ class ProfileActivity : AppCompatActivity() {
         progressBarDialog = ProgressBarDialog(context)
         staffName.setOnKeyListener(null)
         staffDesignation.setOnKeyListener(null)
+        if (PreferenceManager.getIsFireMarshall(context)){
+            attendanceButton.visibility = View.GONE
+        }
         staffName.text =
             Editable.Factory.getInstance().newEditable(PreferenceManager.getStaffName(context))
         var click = 1
@@ -73,6 +77,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
         }
+
         gallery.setOnClickListener {
             val intent = Intent(context, GalleryActivity::class.java)
             startActivity(intent)
@@ -141,10 +146,18 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         homeButton.setOnClickListener {
-            val intent = Intent(context, HomeActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(0, 0)
-            finish()
+            if (PreferenceManager.getIsFireMarshall(context)){
+                val intent = Intent(context, FireMarshallHomeActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+            }else{
+                val intent = Intent(context, HomeActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+            }
+
         }
         attendanceButton.setOnClickListener {
             val intent = Intent(context, AttendanceActivity::class.java)

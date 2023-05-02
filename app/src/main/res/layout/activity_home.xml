@@ -129,14 +129,14 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview"
                 android:layout_width="0dp"
-                android:layout_height="240dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toBottomOf="@+id/staffName">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline9"
                         android:layout_width="wrap_content"
@@ -151,19 +151,6 @@
                         android:orientation="horizontal"
                         app:layout_constraintGuide_percent="0.5" />
 
-                    <View
-                        android:id="@+id/line1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/grey"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.nas.healthandsafety.custom_fields.text_view.CustomFontTextViewSemiBoldBlack
                         android:id="@+id/textView14"
@@ -192,6 +179,7 @@
                         android:layout_marginTop="16dp"
                         android:text="TOTAL \nABSENT"
                         android:textSize="14sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline9"
                         app:layout_constraintTop_toTopOf="@+id/guideline10" />
@@ -202,6 +190,7 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textSize="40dp"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/textView16"
                         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -210,6 +199,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:visibility="gone"
                         android:text="TOTAL \nPRESENT"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toStartOf="@+id/guideline9"
@@ -221,6 +211,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
+                        android:visibility="gone"
                         android:textSize="40dp"
                         app:layout_constraintStart_toStartOf="@+id/textView18"
                         app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -251,6 +242,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:progressTint="#2D4550"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toStartOf="@+id/guideline9"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/presentStudents" />
@@ -261,6 +253,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:progressTint="#EA3056"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline9"
                         app:layout_constraintTop_toBottomOf="@+id/absentStudents" />
@@ -317,6 +310,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
+                android:visibility="gone"
                 android:background="@drawable/rounded_rectangle_white"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintEnd_toEndOf="@id/guideline6"

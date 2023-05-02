@@ -200,7 +200,14 @@ class SignInActivity : AppCompatActivity() {
                                 staffID = signInResponse.data.staff_id.toString()
                                 PreferenceManager.setAccessToken(context, signInResponse.data.token)
                                 PreferenceManager.setStaffID(context, staffID)
+                                PreferenceManager.setIsFireMarshall(context,true)
+                                PreferenceManager.setStaffName(context,signInResponse.data.name)
                                 isMarshal = signInResponse.data.is_martial
+                                if (isMarshal == "1"){
+                                    PreferenceManager.setIsFireMarshall(context,true)
+                                }else{
+                                    PreferenceManager.setIsFireMarshall(context,false)
+                                }
                                 showLoginSuccessPopUp(context,getString(R.string.text_login_success))
                                 // staff name ??
                                 // staff name to pref ??
@@ -244,7 +251,7 @@ class SignInActivity : AppCompatActivity() {
             val text = dialog.findViewById<View>(R.id.textDialog) as TextView
             val button = dialog.findViewById<View>(R.id.okButton) as Button
             button.setOnClickListener {
-                if (isMarshal == "1") {
+                if (PreferenceManager.getIsFireMarshall(context)) {
                     val intent = Intent(context, FireMarshallHomeActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)

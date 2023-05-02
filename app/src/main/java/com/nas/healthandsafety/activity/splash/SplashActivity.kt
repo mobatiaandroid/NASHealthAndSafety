@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.nas.healthandsafety.R
+import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
 import com.nas.healthandsafety.activity.welcome.WelcomeActivity
@@ -28,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
             } else{
                 if (PreferenceManager.getIsFireMarshall(context)) {
                     // Fire marshall activity
-                    val intent: Intent = Intent(this, HomeActivity::class.java)
+                    val intent: Intent = Intent(this, FireMarshallHomeActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else{

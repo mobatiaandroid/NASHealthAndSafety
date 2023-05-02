@@ -11,7 +11,8 @@ data class LoginResponseModel(
     data class Data(
         val staff_id: Int,
         val token: String,
-        val is_martial: String
+        val is_martial: String,
+        val name: String
     )
 
     class Exception

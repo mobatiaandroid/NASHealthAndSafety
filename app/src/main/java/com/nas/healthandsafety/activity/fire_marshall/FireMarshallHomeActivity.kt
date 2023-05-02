@@ -6,16 +6,27 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
+import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.report.ReportActivity
+import com.nas.healthandsafety.activity.session_select.model.YearGroupsResponseModel
+import com.nas.healthandsafety.constants.ApiClient
+import com.nas.healthandsafety.constants.AppUtils
+import com.nas.healthandsafety.constants.PreferenceManager
+import com.nas.healthandsafety.constants.ProgressBarDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var context: Context
@@ -23,7 +34,8 @@ class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var myProfile: ImageView
     lateinit var gallery: ImageView
     lateinit var reports: Button
-
+    lateinit var staffNameTextView: TextView
+    lateinit var progressBarDialog: ProgressBarDialog
     //    lateinit var extras: Bundle
 //    lateinit var classID: String
 //    lateinit var staffName: TextView
@@ -53,6 +65,8 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
         reports = findViewById(R.id.button) as Button
+        staffNameTextView = findViewById(R.id.staffName)
+        progressBarDialog = ProgressBarDialog(context)
 //        staffName = findViewById(R.id.staffName)
 //        imageA = findViewById(R.id.imageA)
 //        imageB = findViewById(R.id.imageB)
@@ -70,6 +84,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //        assemblyAreaSelector = findViewById(R.id.assemblyAreaSelector)
 //        area = findViewById(R.id.area)
 //        slider = findViewById(R.id.slider)
+        staffNameTextView.text = PreferenceManager.getStaffName(context)
         evacuateButton = findViewById(R.id.evacuateButton)
         gallery.setOnClickListener {
             val intent = Intent(context, GalleryActivity::class.java)
@@ -104,7 +119,49 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //            }
 //        }
         evacuateButton.setOnClickListener {
-            showSelectEmergencyPopUp()
+//            showSelectEmergencyPopUp()
+            evacuationStartAPICall()
+        }
+    }
+
+    private fun evacuationStartAPICall() {
+        var evacuationStartResponse: EvacuationStartResponseModel
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<EvacuationStartResponseModel> = ApiClient.getClient.postEvacuationStart(
+                "Bearer "+PreferenceManager.getAccessToken(context)
+            )
+            progressBarDialog!!.show()
+            call.enqueue(object : Callback<EvacuationStartResponseModel> {
+                override fun onResponse(call: Call<EvacuationStartResponseModel>, response: Response<EvacuationStartResponseModel>) {
+                    progressBarDialog!!.hide()
+                    if (response.body() == null) {
+                        if(response.code() == 404) {
+                            AppUtils.showMessagePopUp(context, "An evacuation is already in progress.")
+                        }
+                    } else {
+                        evacuationStartResponse = response.body()!!
+                        if (evacuationStartResponse.status == 200) {
+                            AppUtils.showMessagePopUp(context,"Evacuation Started")
+                        } else if(evacuationStartResponse.status == 401) {
+                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+                        } else if(evacuationStartResponse.status == 404) {
+                            AppUtils.showMessagePopUp(context, "An evacuation is already in progress.")
+                        }else {
+                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                        }
+                    }
+
+                }
+                override fun onFailure(call: Call<EvacuationStartResponseModel>, t: Throwable) {
+                    progressBarDialog!!.hide()
+                    Log.e("message",t.message.toString()+t.localizedMessage.toString()+ t.cause!!.localizedMessage.toString())
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
         }
     }
 

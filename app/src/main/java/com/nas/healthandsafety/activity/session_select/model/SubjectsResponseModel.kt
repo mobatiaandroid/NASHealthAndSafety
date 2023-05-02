@@ -1,6 +1,6 @@
 package com.nas.healthandsafety.activity.session_select.model
 
-data class YearGroupsResponseModel(
+data class SubjectsResponseModel(
     var `data`: ArrayList<Data?>?,
     var exception: Exception?,
     var message: String?, // Success
@@ -9,8 +9,8 @@ data class YearGroupsResponseModel(
     var validation: String?
 ) {
     data class Data(
-        var id: Int?, // 101
-        var year_group: String? // 13-Y13E
+        var class_id: Int?, // 2
+        var name: String? // Primary Music
     )
 
     class Exception

@@ -3,4 +3,7 @@
     <dimen name="default_corner_radius">16dp</dimen>
     <dimen name="half_action_bar">28dp</dimen>
     <dimen name="three_quarter_action_bar">42dp</dimen>
+    <dimen name="switch_padding">1dp</dimen>
+    <dimen name="switch_radius">24dp</dimen>
+    <dimen name="switch_size">24dp</dimen>
 </resources>

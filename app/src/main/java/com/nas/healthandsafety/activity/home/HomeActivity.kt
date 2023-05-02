@@ -1,31 +1,48 @@
 package com.nas.healthandsafety.activity.home
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.evacuation.StudentEvacuationActivity
 import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
+import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
+import com.nas.healthandsafety.activity.home.model.StudentsResponseModel
+import com.nas.healthandsafety.activity.login.SignInActivity
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
+import com.nas.healthandsafety.activity.session_select.model.YearGroupsResponseModel
+import com.nas.healthandsafety.constants.ApiClient
 import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
 import com.ncorti.slidetoact.SlideToActView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeActivity : AppCompatActivity() {
     //    lateinit var bottomNav: BottomNavigationCircles
@@ -39,21 +56,24 @@ class HomeActivity : AppCompatActivity() {
     lateinit var imageA: ImageView
     lateinit var imageB: ImageView
     lateinit var imageC: ImageView
-    lateinit var count: TextView
+    lateinit var countTextView: TextView
     lateinit var greeting: TextView
-    lateinit var totalStudents: TextView
+    lateinit var totalStudentsTextView: TextView
     lateinit var presentStudents: TextView
     lateinit var absentStudents: TextView
-    lateinit var subject: TextView
+    lateinit var subjectTextView: TextView
     lateinit var progressBarPresent: ProgressBar
     lateinit var progressBarAbsent: ProgressBar
-    lateinit var className: TextView
+    lateinit var classNameTextView: TextView
     lateinit var date: TextView
     lateinit var assemblyAreaSelector: View
     lateinit var area: TextView
     lateinit var slider: SlideToActView
     lateinit var evacuateButton: View
     lateinit var fireMarshall: FloatingActionButton
+    var studentArray: ArrayList<StudentsResponseModel.Data> = ArrayList()
+    var isEvac = false
+    var firebaseKey = ""
 
     //    lateinit var presentStudentList: ArrayList<com.nas.fireevacuation.activity.staff_home.model.students_model.Lists>
 //    lateinit var absentStudentList: ArrayList<com.nas.fireevacuation.activity.staff_home.model.students_model.Lists>
@@ -92,20 +112,24 @@ class HomeActivity : AppCompatActivity() {
         imageA = findViewById(R.id.imageA)
         imageB = findViewById(R.id.imageB)
         imageC = findViewById(R.id.imageC)
-        count = findViewById(R.id.count)
-        totalStudents = findViewById(R.id.totalStudents)
+        countTextView = findViewById(R.id.count)
+        totalStudentsTextView = findViewById(R.id.totalStudents)
         presentStudents = findViewById(R.id.presentStudents)
         absentStudents = findViewById(R.id.absentStudents)
         progressBarPresent = findViewById(R.id.progressBarPresent)
         progressBarAbsent = findViewById(R.id.progressBarAbsent)
-        className = findViewById(R.id.className)
-        subject = findViewById(R.id.subjectName)
+        classNameTextView = findViewById(R.id.className)
+        subjectTextView = findViewById(R.id.subjectName)
         greeting = findViewById(R.id.greeting)
         date = findViewById(R.id.date)
         assemblyAreaSelector = findViewById(R.id.assemblyAreaSelector)
         area = findViewById(R.id.area)
         slider = findViewById(R.id.slider)
         evacuateButton = findViewById(R.id.evacuateButton)
+        subjectTextView.text = PreferenceManager.getSubject(context)
+        classNameTextView.text = PreferenceManager.getClassName(context)
+        callStudentsListAPI()
+        callEvacuationStatusAPI()
 //    var slideCompleteListener: OnSlideCompleteListener
 //    presentStudentList = ArrayList()
 //    absentStudentList = ArrayList()
@@ -137,8 +161,8 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         evacuateButton.setOnClickListener {
-            if (area.text.equals("Select Assembly Point")) {
-                AppUtils.showMessagePopUp(context, "Please Select Assembly Point")
+            if (!isEvac) {
+                AppUtils.showMessagePopUp(context, "No Evacuations are in progress")
             } else {
 //                evacuationCall()
                 val intent = Intent(context, StudentEvacuationActivity::class.java)
@@ -236,10 +260,9 @@ class HomeActivity : AppCompatActivity() {
         greetingSetter()
         date.text = currentDate
         classID = PreferenceManager.getClassID(context)
-        className.text = PreferenceManager.getClassName(context)
+        classNameTextView.text = PreferenceManager.getClassName(context)
         staffName.text = PreferenceManager.getStaffName(context)
-        subject.text = PreferenceManager.getSubject(context)
-        Log.e("Class ID:", classID)
+        subjectTextView.text = PreferenceManager.getSubject(context)
 //    TODO
 //    studentListCall(classID)
 
@@ -250,5 +273,112 @@ class HomeActivity : AppCompatActivity() {
 //        bottomNav.circleColor = Color.RED
 
 
+    }
+
+    private fun callEvacuationStatusAPI() {
+        var evacuationStatusResponse: EvacuationStatusResponseModel
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<EvacuationStatusResponseModel> = ApiClient.getClient.getEvacuationStatus(
+                "Bearer "+PreferenceManager.getAccessToken(context)
+            )
+            progressBarDialog!!.show()
+            call.enqueue(object : Callback<EvacuationStatusResponseModel> {
+                override fun onResponse(call: Call<EvacuationStatusResponseModel>, response: Response<EvacuationStatusResponseModel>) {
+                    progressBarDialog!!.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context,getString(R.string.text_unknown_error))
+                    } else {
+                        evacuationStatusResponse = response.body()!!
+                        if (evacuationStatusResponse.status == 200) {
+                            if (evacuationStatusResponse.data!!.isNotEmpty()){
+                                for (i in evacuationStatusResponse.data!!.indices){
+                                    if (evacuationStatusResponse.data!![i]!!.status == 1){
+                                        isEvac = true
+                                        firebaseKey = evacuationStatusResponse.data!![i]!!.evacuation_id!!
+                                        PreferenceManager.setFireRef(context, firebaseKey)
+                                    }
+                                }
+                            }else{
+                                AppUtils.showMessagePopUp(context,"No evacuations are in progress")
+                            }
+                        } else if(evacuationStatusResponse.status == 401) {
+                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+                        } else {
+                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                        }
+                    }
+
+                }
+                override fun onFailure(call: Call<EvacuationStatusResponseModel>, t: Throwable) {
+                    progressBarDialog!!.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+    private fun callStudentsListAPI() {
+        var studentsResponse: StudentsResponseModel
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<StudentsResponseModel> = ApiClient.getClient.getStudents(
+                "Bearer "+PreferenceManager.getAccessToken(context) ,"3"
+            )
+            progressBarDialog!!.show()
+            call.enqueue(object : Callback<StudentsResponseModel> {
+                override fun onResponse(call: Call<StudentsResponseModel>, response: Response<StudentsResponseModel>) {
+                    progressBarDialog!!.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context,getString(R.string.text_unknown_error))
+                    } else {
+                        studentsResponse = response.body()!!
+                        if (studentsResponse.status == 200) {
+                            if (studentsResponse.data!!.isNotEmpty()){
+                                for (i in studentsResponse.data!!.indices) {
+                                    studentArray.add(studentsResponse.data!![i]!!)
+                                }
+                                totalStudentsTextView.text = studentArray.size.toString()
+                                if (studentArray.size > 4){
+
+                                }else if (studentArray.size == 3) {
+                                    countTextView.visibility = View.GONE
+                                }else if (studentArray.size == 2){
+                                    imageC.visibility = View.GONE
+                                    countTextView.visibility = View.GONE
+                                }else if (studentArray.size == 1){
+                                    Glide.with(context)
+                                        .load(studentArray[0].profile_photo_path)
+                                        .into(imageA)
+                                    imageB.visibility = View.GONE
+                                    imageC.visibility = View.GONE
+                                    countTextView.visibility = View.GONE
+                                }else{
+                                    Log.e("Wha","dont print this")
+                                }
+                                Log.e("Student size", studentArray.size.toString())
+                            }else{
+                                AppUtils.showMessagePopUp(context,"No student data available")
+                            }
+                        } else if(studentsResponse.status == 401) {
+                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+                        } else {
+                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                        }
+                    }
+
+                }
+                override fun onFailure(call: Call<StudentsResponseModel>, t: Throwable) {
+                    progressBarDialog!!.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
     }
 }
