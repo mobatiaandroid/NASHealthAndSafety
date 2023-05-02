@@ -1,8 +1,11 @@
 package com.nas.healthandsafety.constants
 
 
-import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationEndResponseModel
+import com.google.gson.JsonObject
+import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
+import com.nas.healthandsafety.activity.home.model.AssemblyPointsResponseModel
+import com.nas.healthandsafety.activity.home.model.DeviceRegistrationResponseModel
 import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
 import com.nas.healthandsafety.activity.home.model.StudentsResponseModel
 import com.nas.healthandsafety.activity.login.model.LoginResponseModel
@@ -80,13 +83,37 @@ interface ApiInterface {
 
     @POST("api/v1/firebase/evacuation-start")
     fun postEvacuationStart(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Body json: JsonObject
     ): Call<EvacuationStartResponseModel>
 
     @POST("api/v1/firebase/evacuation-close")
     fun postEvacuationEnd(
+        @Header("Authorization") token: String,
+        @Body json: JsonObject
+    ): Call<CommonResponseModel>
+
+    @POST("api/v1/staffs/device-data")
+    fun postDeviceData(
+        @Header("Authorization") token: String,
+        @Body json: JsonObject
+    ): Call<DeviceRegistrationResponseModel>
+
+    @POST("api/v1/firebase/send-staff-notification")
+    fun postNotificationStaff(
         @Header("Authorization") token: String
-    ): Call<EvacuationEndResponseModel>
+    ): Call<CommonResponseModel>
+
+    @POST("api/v1/staffs/mark-attendance")
+    fun postStaffAttendance(
+        @Header("Authorization") token: String,
+        @Body json: JsonObject
+    ): Call<CommonResponseModel>
+
+    @GET("api/v1/students/get-assembly-points")
+    fun getAssemblyPoints(
+        @Header("Authorization") token: String
+    ): Call<AssemblyPointsResponseModel>
 //    @FormUrlEncoded
 //    @POST("api/StaffApp/login_V1")
 //    fun loginAPICall(

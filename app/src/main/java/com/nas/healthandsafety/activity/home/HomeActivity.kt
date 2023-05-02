@@ -1,18 +1,12 @@
 package com.nas.healthandsafety.activity.home
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -20,17 +14,18 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.evacuation.StudentEvacuationActivity
 import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
+import com.nas.healthandsafety.activity.home.model.AssemblyPointsResponseModel
+import com.nas.healthandsafety.activity.home.model.DeviceRegistrationResponseModel
 import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
 import com.nas.healthandsafety.activity.home.model.StudentsResponseModel
-import com.nas.healthandsafety.activity.login.SignInActivity
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
-import com.nas.healthandsafety.activity.session_select.model.YearGroupsResponseModel
 import com.nas.healthandsafety.constants.ApiClient
 import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
@@ -42,7 +37,6 @@ import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeActivity : AppCompatActivity() {
     //    lateinit var bottomNav: BottomNavigationCircles
@@ -130,6 +124,10 @@ class HomeActivity : AppCompatActivity() {
         classNameTextView.text = PreferenceManager.getClassName(context)
         callStudentsListAPI()
         callEvacuationStatusAPI()
+        callDeviceRegistrationAPI()
+        callGetAssemblyPoints()
+        area.text = PreferenceManager.getAssemblyPoint(context)
+
 //    var slideCompleteListener: OnSlideCompleteListener
 //    presentStudentList = ArrayList()
 //    absentStudentList = ArrayList()
@@ -275,15 +273,123 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    private fun callGetAssemblyPoints() {
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<AssemblyPointsResponseModel> = ApiClient.getClient.getAssemblyPoints(
+                "Bearer " + PreferenceManager.getAccessToken(context),
+            )
+            progressBarDialog!!.show()
+            call.enqueue(object : Callback<AssemblyPointsResponseModel> {
+                override fun onResponse(
+                    call: Call<AssemblyPointsResponseModel>,
+                    response: Response<AssemblyPointsResponseModel>
+                ) {
+                    progressBarDialog!!.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+                        if (response.body()!!.data!!.isNotEmpty()) {
+                            for (i in response.body()!!.data!!.indices) {
+                                for (j in response.body()!!.data!![i]!!.classes!!.indices) {
+                                    val className = response.body()!!.data!![i]!!.classes!![j]!!
+                                    if (className.equals(PreferenceManager.getClassName(context))) {
+                                        PreferenceManager.setAssemblyPoint(
+                                            context,
+                                            response.body()!!.data!![i]!!.assemblyPoint!!
+                                        )
+                                        area.text = response.body()!!.data!![i]!!.assemblyPoint!!
+                                    }
+                                }
+                            }
+                        }
+//                        deviceRegistrationResponse = response.body()!!
+//                        if (deviceRegistrationResponse.status == 200) {
+//
+//                        } else if(deviceRegistrationResponse.status == 401) {
+//                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+//                        } else {
+//                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+//                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<AssemblyPointsResponseModel>, t: Throwable) {
+                    progressBarDialog!!.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+    private fun callDeviceRegistrationAPI() {
+        var deviceRegistrationResponse: DeviceRegistrationResponseModel
+        val androidID = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        val deviceName = getDeviceName()
+        val paramObject = JsonObject().apply {
+            addProperty("device_type", "2")
+            addProperty("device_id", androidID)
+            addProperty("device_name", deviceName)
+            addProperty("app_version", "1.0")
+            addProperty("fcm_id", PreferenceManager.getFCMID(context))
+        }
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<DeviceRegistrationResponseModel> = ApiClient.getClient.postDeviceData(
+                "Bearer " + PreferenceManager.getAccessToken(context), paramObject
+            )
+            progressBarDialog!!.show()
+            call.enqueue(object : Callback<DeviceRegistrationResponseModel> {
+                override fun onResponse(
+                    call: Call<DeviceRegistrationResponseModel>,
+                    response: Response<DeviceRegistrationResponseModel>
+                ) {
+                    progressBarDialog!!.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+//                        deviceRegistrationResponse = response.body()!!
+//                        if (deviceRegistrationResponse.status == 200) {
+//
+//                        } else if(deviceRegistrationResponse.status == 401) {
+//                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+//                        } else {
+//                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+//                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<DeviceRegistrationResponseModel>, t: Throwable) {
+                    progressBarDialog!!.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
     private fun callEvacuationStatusAPI() {
         var evacuationStatusResponse: EvacuationStatusResponseModel
         if (AppUtils.isInternetAvailable(context)) {
             val call: Call<EvacuationStatusResponseModel> = ApiClient.getClient.getEvacuationStatus(
-                "Bearer "+PreferenceManager.getAccessToken(context)
+                "Bearer " + PreferenceManager.getAccessToken(context)
             )
             progressBarDialog!!.show()
             call.enqueue(object : Callback<EvacuationStatusResponseModel> {
-                override fun onResponse(call: Call<EvacuationStatusResponseModel>, response: Response<EvacuationStatusResponseModel>) {
+                override fun onResponse(
+                    call: Call<EvacuationStatusResponseModel>,
+                    response: Response<EvacuationStatusResponseModel>
+                ) {
                     progressBarDialog!!.hide()
                     if (response.body() == null) {
                         AppUtils.showMessagePopUp(context,getString(R.string.text_unknown_error))
@@ -292,9 +398,14 @@ class HomeActivity : AppCompatActivity() {
                         if (evacuationStatusResponse.status == 200) {
                             if (evacuationStatusResponse.data!!.isNotEmpty()){
                                 for (i in evacuationStatusResponse.data!!.indices){
-                                    if (evacuationStatusResponse.data!![i]!!.status == 1){
+                                    if (evacuationStatusResponse.data!![i]!!.status == 1) {
                                         isEvac = true
-                                        firebaseKey = evacuationStatusResponse.data!![i]!!.evacuation_id!!
+                                        Log.e(
+                                            "tesponse",
+                                            evacuationStatusResponse.data!![i]!!.evacuate_id.toString()
+                                        )
+                                        firebaseKey =
+                                            evacuationStatusResponse.data!![i]!!.evacuate_id!!.toString()
                                         PreferenceManager.setFireRef(context, firebaseKey)
                                     }
                                 }
@@ -379,6 +490,16 @@ class HomeActivity : AppCompatActivity() {
 
         } else {
             AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+    private fun getDeviceName(): String {
+        val manufacturer = Build.MANUFACTURER
+        val model = Build.MODEL
+        return if (model.startsWith(manufacturer, ignoreCase = true)) {
+            model
+        } else {
+            "$manufacturer $model"
         }
     }
 }

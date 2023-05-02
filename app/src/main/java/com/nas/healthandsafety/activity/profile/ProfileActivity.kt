@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,6 +16,7 @@ import android.view.Window
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
@@ -83,6 +86,15 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()
+        }
+        notifications.setOnClickListener {
+            Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+        settings.setOnClickListener {
+            val packageName = packageName
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.fromParts("package", packageName, null)
+            startActivity(intent)
         }
         changePassword.setOnClickListener {
             val dialog = Dialog(context)

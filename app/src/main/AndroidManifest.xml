@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nas.healthandsafety">
@@ -17,15 +18,21 @@
         android:theme="@style/Theme.NASHandS"
         tools:targetApi="31">
         <activity
+            android:name=".activity.fire_marshall.MarshallEvacuationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.report.ReportActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <!-- <intent-filter>
+
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".activity.attendance.AttendanceActivity"
@@ -51,13 +58,16 @@
             android:name=".activity.fire_marshall.FireMarshallHomeActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-            <!--android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"-->
+
+            <!-- android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" -->
             >
-            <!-- <intent-filter>
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".activity.home.HomeActivity"
@@ -113,6 +123,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

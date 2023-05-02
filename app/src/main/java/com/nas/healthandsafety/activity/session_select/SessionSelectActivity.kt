@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +13,10 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
+import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.activity.login.SignInActivity
 import com.nas.healthandsafety.activity.session_select.model.SubjectsResponseModel
@@ -174,15 +176,9 @@ class SessionSelectActivity : AppCompatActivity() {
                 } else if (selectedSubject.text.equals("")) {
                     AppUtils.showMessagePopUp(context, getString(R.string.text_select_subject))
                 } else {
-//                    TODO
-//                    intent into home & save value in pref
-                    val intent = Intent(context, HomeActivity::class.java)
-//                    PreferenceManager.setClassID(context, yearGroupsArrayList[position].id)
-//                    PreferenceManager.setClassName(context, selectedSession.text.toString())
-//                    PreferenceManager.setSubject(context, selectedSubject.text.toString())
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish()
+//                    intent into home & save value in
+                    callCheckInAPI()
+
 
                 }
             }
@@ -218,15 +214,67 @@ class SessionSelectActivity : AppCompatActivity() {
 
     }
 
+    private fun callCheckInAPI() {
+        val paramObject = JsonObject().apply {
+            addProperty("latitude", "8.557420")
+            addProperty("longitude", "76.853180")
+
+        }
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<CommonResponseModel> = ApiClient.getClient.postStaffAttendance(
+                "Bearer " + PreferenceManager.getAccessToken(context), paramObject
+            )
+            progressBarDialog.show()
+            call.enqueue(object : Callback<CommonResponseModel> {
+                override fun onResponse(
+                    call: Call<CommonResponseModel>,
+                    response: Response<CommonResponseModel>
+                ) {
+                    progressBarDialog.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+                        val intent = Intent(context, HomeActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        finish()
+//                        deviceRegistrationResponse = response.body()!!
+//                        if (deviceRegistrationResponse.status == 200) {
+//
+//                        } else if(deviceRegistrationResponse.status == 401) {
+//                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+//                        } else {
+//                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+//                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<CommonResponseModel>, t: Throwable) {
+                    progressBarDialog.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+
+    }
+
     private fun callSubjectListAPI() {
         var subjectsResponse: SubjectsResponseModel
         if (AppUtils.isInternetAvailable(context)) {
             val call: Call<SubjectsResponseModel> = ApiClient.getClient.getSubjects(
-                "Bearer "+PreferenceManager.getAccessToken(context), classID
+                "Bearer " + PreferenceManager.getAccessToken(context), classID
             )
             progressBarDialog.show()
             call.enqueue(object : Callback<SubjectsResponseModel> {
-                override fun onResponse(call: Call<SubjectsResponseModel>, response: Response<SubjectsResponseModel>) {
+                override fun onResponse(
+                    call: Call<SubjectsResponseModel>,
+                    response: Response<SubjectsResponseModel>
+                ) {
                     progressBarDialog.hide()
                     if (response.body() == null) {
                         AppUtils.showMessagePopUp(context,getString(R.string.text_unknown_error))

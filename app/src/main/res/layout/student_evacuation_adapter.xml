@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -22,7 +21,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:padding="4dp"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,21 +100,25 @@
 
             <com.nas.healthandsafety.custom_fields.text_view.CustomFontTextViewSemiBoldBlack
                 android:id="@+id/studentName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="TextView"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/studentID"
+                app:layout_constraintEnd_toStartOf="@+id/presentOrAbsent"
                 app:layout_constraintStart_toEndOf="@+id/shape_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.nas.healthandsafety.custom_fields.text_view.CustomFontTextViewRegularBlack
                 android:id="@+id/studentID"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/presentOrAbsent"
                 app:layout_constraintStart_toEndOf="@+id/shape_layout"
                 app:layout_constraintTop_toBottomOf="@+id/studentName" />
         </androidx.constraintlayout.widget.ConstraintLayout>

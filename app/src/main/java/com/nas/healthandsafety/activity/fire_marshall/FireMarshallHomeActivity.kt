@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Window
 import android.widget.Button
@@ -13,17 +15,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.attendance.AttendanceActivity
+import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
+import com.nas.healthandsafety.activity.home.model.DeviceRegistrationResponseModel
+import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.report.ReportActivity
-import com.nas.healthandsafety.activity.session_select.model.YearGroupsResponseModel
 import com.nas.healthandsafety.constants.ApiClient
 import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
+import com.ncorti.slidetoact.SlideToActView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +42,9 @@ class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var reports: Button
     lateinit var staffNameTextView: TextView
     lateinit var progressBarDialog: ProgressBarDialog
+    var isEvac = false
+    var firebaseKey = ""
+
     //    lateinit var extras: Bundle
 //    lateinit var classID: String
 //    lateinit var staffName: TextView
@@ -64,9 +73,12 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         attendenceButton = findViewById(R.id.attendence)
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
-        reports = findViewById(R.id.button) as Button
+        reports = findViewById<Button>(R.id.button)
         staffNameTextView = findViewById(R.id.staffName)
         progressBarDialog = ProgressBarDialog(context)
+        callDeviceRegistrationAPI()
+        callEvacuationStatusAPI()
+
 //        staffName = findViewById(R.id.staffName)
 //        imageA = findViewById(R.id.imageA)
 //        imageB = findViewById(R.id.imageB)
@@ -120,28 +132,83 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //        }
         evacuateButton.setOnClickListener {
 //            showSelectEmergencyPopUp()
-            evacuationStartAPICall()
+            notifyStaffAPICall()
         }
     }
 
-    private fun evacuationStartAPICall() {
+    private fun notifyStaffAPICall() {
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<CommonResponseModel> = ApiClient.getClient.postNotificationStaff(
+                "Bearer " + PreferenceManager.getAccessToken(context)
+            )
+            progressBarDialog.show()
+            call.enqueue(object : Callback<CommonResponseModel> {
+                override fun onResponse(
+                    call: Call<CommonResponseModel>,
+                    response: Response<CommonResponseModel>
+                ) {
+                    progressBarDialog.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+                        if (response.body()!!.status == 200) {
+                            Log.e("Here", response.body()!!.data.toString())
+                            showSelectEmergencyPopUp()
+                        } else {
+                            AppUtils.showMessagePopUp(context, "Staff Notification not sent!")
+                        }
+//                        deviceRegistrationResponse = response.body()!!
+//                        if (deviceRegistrationResponse.status == 200) {
+//
+//                        } else if(deviceRegistrationResponse.status == 401) {
+//                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+//                        } else {
+//                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+//                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<CommonResponseModel>, t: Throwable) {
+                    progressBarDialog.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+    private fun evacuationStartAPICall(type: String) {
         var evacuationStartResponse: EvacuationStartResponseModel
+        val paramObject = JsonObject().apply {
+            addProperty("evacuate_type", type)
+
+        }
         if (AppUtils.isInternetAvailable(context)) {
             val call: Call<EvacuationStartResponseModel> = ApiClient.getClient.postEvacuationStart(
-                "Bearer "+PreferenceManager.getAccessToken(context)
+                "Bearer " + PreferenceManager.getAccessToken(context),
+                paramObject
             )
-            progressBarDialog!!.show()
+            progressBarDialog.show()
             call.enqueue(object : Callback<EvacuationStartResponseModel> {
-                override fun onResponse(call: Call<EvacuationStartResponseModel>, response: Response<EvacuationStartResponseModel>) {
-                    progressBarDialog!!.hide()
+                override fun onResponse(
+                    call: Call<EvacuationStartResponseModel>,
+                    response: Response<EvacuationStartResponseModel>
+                ) {
+                    progressBarDialog.hide()
                     if (response.body() == null) {
-                        if(response.code() == 404) {
-                            AppUtils.showMessagePopUp(context, "An evacuation is already in progress.")
+                        if (response.code() == 404) {
+                            showPopUp(context, "An evacuation is already in progress.", true)
                         }
                     } else {
                         evacuationStartResponse = response.body()!!
                         if (evacuationStartResponse.status == 200) {
-                            AppUtils.showMessagePopUp(context,"Evacuation Started")
+                            val firebaseKey = evacuationStartResponse.data!!.get_key.toString()
+                            PreferenceManager.setFireRef(context, firebaseKey)
+                            showPopUp(context, "An evacuation has been started. ", false)
                         } else if(evacuationStartResponse.status == 401) {
                             AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
                         } else if(evacuationStartResponse.status == 404) {
@@ -153,8 +220,11 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 
                 }
                 override fun onFailure(call: Call<EvacuationStartResponseModel>, t: Throwable) {
-                    progressBarDialog!!.hide()
-                    Log.e("message",t.message.toString()+t.localizedMessage.toString()+ t.cause!!.localizedMessage.toString())
+                    progressBarDialog.hide()
+                    Log.e(
+                        "message",
+                        t.message.toString() + t.localizedMessage.toString() + t.cause!!.localizedMessage.toString()
+                    )
                     AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
                 }
 
@@ -171,8 +241,169 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         dialog.setCancelable(true)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setContentView(R.layout.dialog_emergency_select)
+        val slider = dialog.findViewById<SlideToActView>(R.id.slider)
+        val slider2 = dialog.findViewById<SlideToActView>(R.id.slider2)
+        val slider3 = dialog.findViewById<SlideToActView>(R.id.slider3)
+        slider.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                evacuationStartAPICall("Fire Emergency")
+            }
+        }
+        slider2.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                evacuationStartAPICall("Bomb Alert")
+            }
+        }
+        slider3.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                evacuationStartAPICall("Emergency Drill")
+            }
+        }
 //        val text = dialog.findViewById<View>(R.id.textDialog) as TextView
 //        text.text = context.getString(R.string.text_network_error)
         dialog.show()
     }
+
+    private fun callDeviceRegistrationAPI() {
+        var deviceRegistrationResponse: DeviceRegistrationResponseModel
+        val androidID = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        val deviceName = getDeviceName()
+        val paramObject = JsonObject().apply {
+            addProperty("device_type", "2")
+            addProperty("device_id", androidID)
+            addProperty("device_name", deviceName)
+            addProperty("app_version", "1.0")
+            addProperty("fcm_id", PreferenceManager.getFCMID(context))
+        }
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<DeviceRegistrationResponseModel> = ApiClient.getClient.postDeviceData(
+                "Bearer " + PreferenceManager.getAccessToken(context), paramObject
+            )
+            progressBarDialog.show()
+            call.enqueue(object : Callback<DeviceRegistrationResponseModel> {
+                override fun onResponse(
+                    call: Call<DeviceRegistrationResponseModel>,
+                    response: Response<DeviceRegistrationResponseModel>
+                ) {
+                    progressBarDialog.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+//                        deviceRegistrationResponse = response.body()!!
+//                        if (deviceRegistrationResponse.status == 200) {
+//
+//                        } else if(deviceRegistrationResponse.status == 401) {
+//                            AppUtils.showMessagePopUp(context, "Unauthenticated or Token Expired, Please Login")
+//                        } else {
+//                            AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+//                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<DeviceRegistrationResponseModel>, t: Throwable) {
+                    progressBarDialog.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+    private fun getDeviceName(): String {
+        val manufacturer = Build.MANUFACTURER
+        val model = Build.MODEL
+        return if (model.startsWith(manufacturer, ignoreCase = true)) {
+            model
+        } else {
+            "$manufacturer $model"
+        }
+    }
+
+    private fun showPopUp(context: Context, message: String, type: Boolean) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.dialog_alert_ok)
+        val text = dialog.findViewById<android.view.View>(R.id.textDialog) as TextView
+        val button = dialog.findViewById<android.view.View>(R.id.okButton) as Button
+        button.setOnClickListener {
+            val intent = Intent(context, MarshallEvacuationActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+        }
+        text.text = message
+        dialog.show()
+
+    }
+
+    private fun callEvacuationStatusAPI() {
+        var evacuationStatusResponse: EvacuationStatusResponseModel
+        if (AppUtils.isInternetAvailable(context)) {
+            val call: Call<EvacuationStatusResponseModel> = ApiClient.getClient.getEvacuationStatus(
+                "Bearer " + PreferenceManager.getAccessToken(context)
+            )
+            progressBarDialog.show()
+            call.enqueue(object : Callback<EvacuationStatusResponseModel> {
+                override fun onResponse(
+                    call: Call<EvacuationStatusResponseModel>,
+                    response: Response<EvacuationStatusResponseModel>
+                ) {
+                    progressBarDialog.hide()
+                    if (response.body() == null) {
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    } else {
+                        evacuationStatusResponse = response.body()!!
+                        if (evacuationStatusResponse.status == 200) {
+                            if (evacuationStatusResponse.data!!.isNotEmpty()) {
+                                for (i in evacuationStatusResponse.data!!.indices) {
+                                    if (evacuationStatusResponse.data!![i]!!.status == 1) {
+                                        isEvac = true
+                                        Log.e(
+                                            "tesponse",
+                                            evacuationStatusResponse.data!![i]!!.evacuate_id.toString()
+                                        )
+                                        firebaseKey =
+                                            evacuationStatusResponse.data!![i]!!.evacuate_id!!.toString()
+                                        PreferenceManager.setFireRef(context, firebaseKey)
+                                    }
+                                }
+                            } else {
+                                AppUtils.showMessagePopUp(context, "No evacuations are in progress")
+                            }
+                        } else if (evacuationStatusResponse.status == 401) {
+                            AppUtils.showMessagePopUp(
+                                context,
+                                "Unauthenticated or Token Expired, Please Login"
+                            )
+                        } else {
+                            AppUtils.showMessagePopUp(
+                                context,
+                                getString(R.string.text_unknown_error)
+                            )
+                        }
+                    }
+
+                }
+
+                override fun onFailure(call: Call<EvacuationStatusResponseModel>, t: Throwable) {
+                    progressBarDialog.hide()
+                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                }
+
+            })
+
+        } else {
+            AppUtils.showNetworkErrorPopUp(context)
+        }
+    }
+
+
 }

@@ -105,7 +105,7 @@
             app:text="FIRE ALERT"
             app:text_color="@color/black"
             app:text_size="16sp"
-            app:text_style="bold"></com.ncorti.slidetoact.SlideToActView>
+            app:text_style="bold" />
 
         <com.ncorti.slidetoact.SlideToActView
             android:id="@+id/slider2"
@@ -128,7 +128,7 @@
 
             app:text_color="@color/black"
             app:text_size="16sp"
-            app:text_style="bold"></com.ncorti.slidetoact.SlideToActView>
+            app:text_style="bold" />
 
         <com.ncorti.slidetoact.SlideToActView
             android:id="@+id/slider3"
@@ -150,7 +150,7 @@
 
             app:text_color="@color/black"
             app:text_size="16sp"
-            app:text_style="bold"></com.ncorti.slidetoact.SlideToActView>
+            app:text_style="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
