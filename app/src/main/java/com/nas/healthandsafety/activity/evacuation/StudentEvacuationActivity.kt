@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -84,6 +83,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         studentArray = ArrayList()
+
                         for (i in snapshot.children) {
                             val studentName = i.child("student_name").value.toString()
                             val registrationID = i.child("student_id").value.toString()
@@ -91,7 +91,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                             val evacuated = i.child("evacuated").value.toString()
                             val temp = StudentModel(studentName, registrationID, section, evacuated)
                             Log.e("class", PreferenceManager.getClassName(context))
-                            if (section == PreferenceManager.getClassName(context)) {
+                            if (PreferenceManager.getClassName(context).contains(section)) {
                                 studentArray.add(temp)
                             }
 
@@ -99,10 +99,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         }
                     }
                     if (studentArray.isEmpty()) {
-                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
+
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
+                        if (studentArray.size > 10) {
+                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+                            studentArray = subArrayList
+                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -139,10 +144,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         }
                     }
                     if (studentArray.isEmpty()) {
-                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
+                        if (studentArray.size > 10) {
+                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+                            studentArray = subArrayList
+                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -154,6 +163,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                 }
 
             })
+
 
         }
         database.addValueEventListener(object : ValueEventListener {
@@ -167,7 +177,8 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         val evacuated = i.child("evacuated").value.toString()
                         val temp = StudentModel(studentName, registrationID, section, evacuated)
                         Log.e("class", PreferenceManager.getClassName(context))
-                        if (section == PreferenceManager.getClassName(context)) {
+                        Log.e("class", PreferenceManager.getClassName(context))
+                        if (PreferenceManager.getClassName(context).contains(section)) {
                             studentArray.add(temp)
                         }
 
@@ -175,10 +186,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     }
                 }
                 if (studentArray.isEmpty()) {
-                    Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
                     studentAdapter = StudentAdapter(context, ArrayList())
                     studentRecycler.adapter = studentAdapter
                 } else {
+                    if (studentArray.size > 10) {
+                        val subArrayList = ArrayList(studentArray.subList(0, 10))
+                        studentArray = subArrayList
+                    }
                     studentAdapter = StudentAdapter(context, studentArray)
                     studentRecycler.adapter = studentAdapter
                 }

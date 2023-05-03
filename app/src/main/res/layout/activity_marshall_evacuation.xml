@@ -53,7 +53,7 @@
         android:layout_height="200dp"
         app:arc_bottom_text="Students Evacuated"
         app:arc_finished_color="@color/green"
-        app:arc_progress="50"
+        app:arc_progress="0"
         app:arc_stroke_width="16dp"
         app:arc_suffix_text="%"
         app:arc_unfinished_color="@color/pink"

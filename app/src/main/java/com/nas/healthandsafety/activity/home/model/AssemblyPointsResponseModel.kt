@@ -9,7 +9,7 @@ data class AssemblyPointsResponseModel(
     var validation: String?
 ) {
     data class Data(
-        var assemblyPoint: String?,
+        var assembly_point: String?,
         var classes: List<String?>?,
         var id: Int?
     )

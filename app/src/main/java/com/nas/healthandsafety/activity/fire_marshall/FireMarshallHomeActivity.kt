@@ -338,6 +338,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
             val intent = Intent(context, MarshallEvacuationActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
+            finish()
         }
         text.text = message
         dialog.show()

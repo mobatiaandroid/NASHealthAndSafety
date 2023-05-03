@@ -40,9 +40,16 @@ class MarshallEvacuationActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     lateinit var studentArray: ArrayList<StudentModel>
     var maxCount = 1
-    val count = 0
+    var count = 0
     private lateinit var handler: Handler
     private var progressValue = 0
+    override fun onBackPressed() {
+        val intent = Intent(context, FireMarshallHomeActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_marshall_evacuation)
@@ -56,15 +63,28 @@ class MarshallEvacuationActivity : AppCompatActivity() {
         handler = Handler(Looper.getMainLooper())
 
         // Start the progress update
-        startProgressUpdate()
+//        startProgressUpdate()
 
         database = FirebaseDatabase.getInstance().reference
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
             .child(PreferenceManager.getFireRef(context))
+        count = 0
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    count = 0
                     maxCount = snapshot.childrenCount.toInt()
+                    if (maxCount > 10) {
+                        maxCount = 10
+                    }
+                    arcProgress.max = maxCount
+                    for (i in snapshot.children) {
+                        if (i.child("evacuated").value.toString() == "1") {
+                            count += 1
+                            Log.e("COunt", count.toString())
+                        }
+                    }
+                    arcProgress.progress = count
                 }
 
 

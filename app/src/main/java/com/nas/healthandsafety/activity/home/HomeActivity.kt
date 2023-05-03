@@ -290,14 +290,25 @@ class HomeActivity : AppCompatActivity() {
                     } else {
                         if (response.body()!!.data!!.isNotEmpty()) {
                             for (i in response.body()!!.data!!.indices) {
+
                                 for (j in response.body()!!.data!![i]!!.classes!!.indices) {
-                                    val className = response.body()!!.data!![i]!!.classes!![j]!!
-                                    if (className.equals(PreferenceManager.getClassName(context))) {
+                                    val className =
+                                        response.body()!!.data!![i]!!.classes!![j]!!.replace(
+                                            "\\s+".toRegex(),
+                                            ""
+                                        )
+                                    if (className == PreferenceManager.getClassName(context)) {
+                                        Log.e("class", className)
+                                        Log.e(
+                                            "class2",
+                                            response.body()!!.data!![0]!!.assembly_point!!.toString()
+                                        )
                                         PreferenceManager.setAssemblyPoint(
                                             context,
-                                            response.body()!!.data!![i]!!.assemblyPoint!!
+                                            response.body()!!.data!![i]!!.assembly_point!!.toString()
                                         )
-                                        area.text = response.body()!!.data!![i]!!.assemblyPoint!!
+                                        area.text =
+                                            response.body()!!.data!![i]!!.assembly_point!!.toString()
                                     }
                                 }
                             }
@@ -447,16 +458,38 @@ class HomeActivity : AppCompatActivity() {
                     } else {
                         studentsResponse = response.body()!!
                         if (studentsResponse.status == 200) {
-                            if (studentsResponse.data!!.isNotEmpty()){
+                            if (studentsResponse.data!!.isNotEmpty()) {
                                 for (i in studentsResponse.data!!.indices) {
                                     studentArray.add(studentsResponse.data!![i]!!)
                                 }
-                                totalStudentsTextView.text = studentArray.size.toString()
-                                if (studentArray.size > 4){
+                                if (studentArray.size > 10) {
+                                    totalStudentsTextView.text = "10"
 
-                                }else if (studentArray.size == 3) {
+                                } else {
+                                    totalStudentsTextView.text = studentArray.size.toString()
+
+                                }
+
+                                if (studentArray.size > 4) {
+
+                                } else if (studentArray.size == 3) {
+                                    Glide.with(context)
+                                        .load(studentArray[0].profile_photo_path)
+                                        .into(imageA)
+                                    Glide.with(context)
+                                        .load(studentArray[1].profile_photo_path)
+                                        .into(imageB)
+                                    Glide.with(context)
+                                        .load(studentArray[2].profile_photo_path)
+                                        .into(imageC)
                                     countTextView.visibility = View.GONE
-                                }else if (studentArray.size == 2){
+                                }else if (studentArray.size == 2) {
+                                    Glide.with(context)
+                                        .load(studentArray[0].profile_photo_path)
+                                        .into(imageA)
+                                    Glide.with(context)
+                                        .load(studentArray[1].profile_photo_path)
+                                        .into(imageB)
                                     imageC.visibility = View.GONE
                                     countTextView.visibility = View.GONE
                                 }else if (studentArray.size == 1){

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
@@ -215,7 +216,11 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
         /* Log.e("emplyee_list_count", employee_array.size.toString())*/
         var size: Int = studentArray.size
         /*Log.e("size",size.toString())*/
+        if (size == 0) {
+            Toast.makeText(context, "No Students Available", Toast.LENGTH_SHORT).show()
+        }
         return studentArray.size
+
 
     }
 
