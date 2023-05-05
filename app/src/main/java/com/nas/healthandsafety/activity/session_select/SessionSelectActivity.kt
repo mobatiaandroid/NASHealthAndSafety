@@ -276,15 +276,17 @@ class SessionSelectActivity : AppCompatActivity() {
                     response: Response<SubjectsResponseModel>
                 ) {
                     progressBarDialog.hide()
+                    subjectsArray.clear()
+                    subjectsList.clear()
                     if (response.body() == null) {
-                        AppUtils.showMessagePopUp(context,getString(R.string.text_unknown_error))
+                        AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
                     } else {
                         Log.e("subjects", response.body().toString())
                         subjectsResponse = response.body()!!
                         if (subjectsResponse.status == 200) {
                             if (subjectsResponse.message.equals("success", ignoreCase = true)) {
                                 if (subjectsResponse.data!!.isNotEmpty()) {
-                                    for (i in  subjectsResponse.data!!.indices){
+                                    for (i in subjectsResponse.data!!.indices) {
                                         subjectsArray.add(subjectsResponse.data!![i]!!)
                                     }
                                     for (i in subjectsArray.indices){
