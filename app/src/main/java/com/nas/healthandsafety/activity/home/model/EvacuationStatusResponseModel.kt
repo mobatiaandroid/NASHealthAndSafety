@@ -15,7 +15,8 @@ data class EvacuationStatusResponseModel(
         var evacuate_id: String?, // -NUCNUc58bYPCUF1B_ke
         var id: Int?, // 6
         var status: Int?, // 1
-        var status_value: String? // evacuation start
+        var status_value: String?, // evacuation start
+        var evacuate_type: String? // Fire
     )
 
     class Exception

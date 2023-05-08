@@ -41,6 +41,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var gallery: ImageView
     lateinit var reports: Button
     lateinit var staffNameTextView: TextView
+    lateinit var pastEvacuationsButton: Button
     lateinit var progressBarDialog: ProgressBarDialog
     var isEvac = false
     var firebaseKey = ""
@@ -76,6 +77,8 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         reports = findViewById<Button>(R.id.button)
         staffNameTextView = findViewById(R.id.staffName)
         progressBarDialog = ProgressBarDialog(context)
+        pastEvacuationsButton = findViewById(R.id.pastEvacuationsButton)
+
         callDeviceRegistrationAPI()
         callEvacuationStatusAPI()
 
@@ -118,6 +121,12 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         }
         attendenceButton.setOnClickListener {
             val intent = Intent(context, AttendanceActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
+        pastEvacuationsButton.setOnClickListener {
+            val intent = Intent(context, PastEvacuationsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()
