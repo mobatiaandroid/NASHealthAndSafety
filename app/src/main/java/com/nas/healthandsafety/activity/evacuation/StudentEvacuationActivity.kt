@@ -72,7 +72,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
             context,
             RecyclerView.VERTICAL, false
         )
-        database = FirebaseDatabase.getInstance().reference
+//        database = FirebaseDatabase.getInstance().reference
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
             .child(PreferenceManager.getFireRef(context))
         Log.e("ref", database.toString())

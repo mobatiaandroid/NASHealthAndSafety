@@ -289,6 +289,7 @@ class HomeActivity : AppCompatActivity() {
                         AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
                     } else {
                         if (response.body()!!.data!!.isNotEmpty()) {
+
                             for (i in response.body()!!.data!!.indices) {
 
                                 for (j in response.body()!!.data!![i]!!.classes!!.indices) {
@@ -412,7 +413,7 @@ class HomeActivity : AppCompatActivity() {
                                     if (evacuationStatusResponse.data!![i]!!.status == 1) {
                                         isEvac = true
                                         Log.e(
-                                            "tesponse",
+                                            "response",
                                             evacuationStatusResponse.data!![i]!!.evacuate_id.toString()
                                         )
                                         firebaseKey =
