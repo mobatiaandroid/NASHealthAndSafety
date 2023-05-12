@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
-import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.evacuation.StudentEvacuationActivity
 import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
@@ -34,6 +33,7 @@ import com.ncorti.slidetoact.SlideToActView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.System.exit
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,7 +41,7 @@ import java.util.*
 class HomeActivity : AppCompatActivity() {
     //    lateinit var bottomNav: BottomNavigationCircles
     lateinit var context: Context
-    lateinit var attendenceButton: ImageView
+    lateinit var marshallButton: ImageView
     lateinit var myProfile: ImageView
     lateinit var gallery: ImageView
     lateinit var extras: Bundle
@@ -90,6 +90,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        exit(0)
+    }
+
     //    var database = Firebase.database
 //    var reference = database.reference
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -98,7 +102,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         context = this
         progressBarDialog = ProgressBarDialog(context)
-        attendenceButton = findViewById(R.id.attendence)
+        marshallButton = findViewById(R.id.marshall)
         fireMarshall = findViewById(R.id.fireMarshallButton)
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
@@ -169,86 +173,14 @@ class HomeActivity : AppCompatActivity() {
                 finish()
             }
         }
-        assemblyAreaSelector.setOnClickListener {
-//        var assemblyPointsResponse: AssemblyPointsModel
-//        var assemblyPointsList: ArrayList<Lists> = ArrayList()
-            var i: Int = 0
-            if (AppUtils.isInternetAvailable(context)) {
-//            TODO
-                // assembly points
-//            val call: Call<AssemblyPointsModel> = ApiClient.getClient.assemblyPoints(
-//                PreferenceManager.getAccessToken(context)
-//            )
-//            call.enqueue(object : Callback<AssemblyPointsModel> {
-//                override fun onResponse(
-//                    call: Call<AssemblyPointsModel>,
-//                    response: Response<AssemblyPointsModel>
-//                ) {
-////                    Log.e("Assembly Response",response.body().toString())
-//                    if (!response.body()!!.equals("")) {
-//                        assemblyPointsResponse = response.body()!!
-//                        if (assemblyPointsResponse.responsecode.equals("100")) {
-//                            if (assemblyPointsResponse.message.equals("success")) {
-//                                while (i < assemblyPointsResponse.data.lists.size) {
-//                                    assemblyPointsList.add(assemblyPointsResponse.data.lists[i])
-//                                    i++
-//                                }
-////                                Log.e("Assembly Points2", assemblyPointsList.toString())
-//                                var i = 0
-//                                var assemblyPointsStringList: ArrayList<String> = ArrayList()
-//                                while (i < assemblyPointsList.size) {
-//                                    assemblyPointsStringList.add(assemblyPointsList[i].assembly_point)
-//                                    i++
-//                                }
-////                                Log.e("Assembly Points3", assemblyPointsStringList.toString())
-//                                val builder = AlertDialog.Builder(context)
-//                                builder.setTitle("Select Session")
-//                                var checkedItem = -1
-//                                builder.setSingleChoiceItems(
-//                                    assemblyPointsStringList.toTypedArray(),
-//                                    checkedItem
-//                                ) { dialog, which ->
-//                                    checkedItem = which
-//                                }
-//                                builder.setPositiveButton("OK") { dialog, which ->
-//                                    if (checkedItem == -1) {
-//                                        AppUtils.showMessagePopUp(
-//                                            context,
-//                                            "Please Select"
-//                                        )
-//                                    } else {
-//                                        area.text = assemblyPointsStringList[checkedItem]
-//                                        PreferenceManager.setAssemblyPoint(
-//                                            context,
-//                                            assemblyPointsList[checkedItem].id
-//                                        )
-//
-//                                    }
-//
-//                                }
-//                                builder.setNegativeButton("Cancel", null)
-//                                val dialog = builder.create()
-//                                dialog.show()
-//
-//                            }
-//                        } else if (assemblyPointsResponse.responsecode.equals("402")) {
-//                            AppUtils.showMessagePopUp(context, "Session Expired")
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<AssemblyPointsModel>, t: Throwable) {
-//                    AppUtils.showMessagePopUp(context, "Some Error Occurred")
-//                }
-//
-//            })
-            } else {
-                AppUtils.showMessagePopUp(context, "Check your Internet connection")
-            }
 
+        if (PreferenceManager.getIsFireMarshall(context)) {
+            marshallButton.visibility = View.VISIBLE
+        } else {
+            marshallButton.visibility = View.GONE
         }
-        attendenceButton.setOnClickListener {
-            val intent = Intent(context, AttendanceActivity::class.java)
+        marshallButton.setOnClickListener {
+            val intent = Intent(context, FireMarshallHomeActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
         }

@@ -13,6 +13,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.gson.JsonObject
@@ -21,10 +22,12 @@ import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
+import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.activity.home.model.DeviceRegistrationResponseModel
 import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
 import com.nas.healthandsafety.activity.profile.ProfileActivity
 import com.nas.healthandsafety.activity.report.ReportActivity
+import com.nas.healthandsafety.activity.session_select.SessionSelectActivity
 import com.nas.healthandsafety.constants.ApiClient
 import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
@@ -36,13 +39,18 @@ import retrofit2.Response
 
 class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var context: Context
-    lateinit var attendenceButton: ImageView
+    lateinit var marshallButton: ImageView
+    lateinit var homeButton: ImageView
     lateinit var myProfile: ImageView
     lateinit var gallery: ImageView
     lateinit var reports: Button
     lateinit var staffNameTextView: TextView
     lateinit var pastEvacuationsButton: Button
     lateinit var progressBarDialog: ProgressBarDialog
+    lateinit var slider: SlideToActView
+    lateinit var button1: Button
+    lateinit var button2: Button
+
     var isEvac = false
     var firebaseKey = ""
 
@@ -66,21 +74,47 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //    lateinit var area: TextView
 //    lateinit var slider: SlideToActView
     lateinit var evacuateButton: ExtendedFloatingActionButton
+    override fun onBackPressed() {
+        val intent = Intent(context, HomeActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fire_marshall_home)
         context = this
 //        progressBarDialog = ProgressBarDialog(context)
-        attendenceButton = findViewById(R.id.attendence)
+        marshallButton = findViewById(R.id.attendence)
+        homeButton = findViewById(R.id.imageView12)
         gallery = findViewById(R.id.gallery)
         myProfile = findViewById(R.id.myProfile)
         reports = findViewById<Button>(R.id.button)
         staffNameTextView = findViewById(R.id.staffName)
         progressBarDialog = ProgressBarDialog(context)
         pastEvacuationsButton = findViewById(R.id.pastEvacuationsButton)
+        slider = findViewById(R.id.slider)
+        button1 = findViewById(R.id.button23)
+        button2 = findViewById(R.id.button2)
+
 
         callDeviceRegistrationAPI()
         callEvacuationStatusAPI()
+        button1.setOnClickListener {
+            Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+        button2.setOnClickListener {
+            Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+        }
+        slider.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                val intent = Intent(context, SessionSelectActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+            }
+        }
 
 //        staffName = findViewById(R.id.staffName)
 //        imageA = findViewById(R.id.imageA)
@@ -101,6 +135,12 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //        slider = findViewById(R.id.slider)
         staffNameTextView.text = PreferenceManager.getStaffName(context)
         evacuateButton = findViewById(R.id.evacuateButton)
+        homeButton.setOnClickListener {
+            val intent = Intent(context, HomeActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
         gallery.setOnClickListener {
             val intent = Intent(context, GalleryActivity::class.java)
             startActivity(intent)
@@ -119,7 +159,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
             finish()
         }
-        attendenceButton.setOnClickListener {
+        marshallButton.setOnClickListener {
             val intent = Intent(context, AttendanceActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)

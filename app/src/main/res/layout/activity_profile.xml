@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/myProfile"
+                app:layout_constraintEnd_toStartOf="@+id/attendence"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -83,16 +83,15 @@
 
             <ImageView
                 android:id="@+id/attendence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/gallery"
-                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/myProfile"
                 app:layout_constraintStart_toEndOf="@+id/home"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.857"
-                app:srcCompat="@drawable/attendence_icon" />
+                app:srcCompat="@drawable/firefighterhelmet" />
 
             <ImageView
                 android:id="@+id/gallery"
@@ -113,7 +112,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/home"
+                app:layout_constraintStart_toEndOf="@+id/attendence"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/profile_icon_selected" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,13 +129,14 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/TextView1" />
 
-    <EditText
+    <TextView
         android:id="@+id/staffName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@null"
         android:clickable="false"
+        android:editable="false"
         android:text="Gabriella"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -144,11 +144,12 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
-    <EditText
+    <TextView
         android:id="@+id/staffDesignation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:editable="false"
         android:text="English Lecturer"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/staffName"
@@ -231,7 +232,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Checkout"
+        android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="@+id/imageView10"
         app:layout_constraintStart_toEndOf="@+id/imageView10"
         app:layout_constraintTop_toTopOf="@+id/imageView10" />
@@ -241,6 +242,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toBottomOf="@+id/TextView1"
         app:srcCompat="@drawable/edit_icon" />

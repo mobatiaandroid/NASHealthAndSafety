@@ -251,17 +251,17 @@ class SignInActivity : AppCompatActivity() {
             val text = dialog.findViewById<View>(R.id.textDialog) as TextView
             val button = dialog.findViewById<View>(R.id.okButton) as Button
             button.setOnClickListener {
-                if (PreferenceManager.getIsFireMarshall(context)) {
-                    val intent = Intent(context, FireMarshallHomeActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish()
-                } else {
-                    val intent = Intent(context, SessionSelectActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish()
-                }
+//                if (PreferenceManager.getIsFireMarshall(context)) {
+                val intent = Intent(context, SessionSelectActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+                finish()
+//                } else {
+//                    val intent = Intent(context, SessionSelectActivity::class.java)
+//                    startActivity(intent)
+//                    overridePendingTransition(0, 0)
+//                    finish()
+//                }
 
             }
             text.text = message

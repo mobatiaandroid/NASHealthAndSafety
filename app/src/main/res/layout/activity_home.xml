@@ -451,7 +451,7 @@
                 app:rotate_icon="false"
                 app:slider_icon_color="@color/white"
                 app:icon_margin="8dp"
-                app:animate_completion="false"
+                app:animate_completion="true"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toBottomOf="@+id/evacuateButton"
@@ -502,23 +502,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/myProfile"
+                app:layout_constraintEnd_toStartOf="@+id/marshall"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/home_icon_selected" />
 
             <ImageView
-                android:id="@+id/attendence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/gallery"
+                android:id="@+id/marshall"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/myProfile"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView12"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/attendence_icon" />
+                app:srcCompat="@drawable/firefighterhelmet" />
 
             <ImageView
                 android:id="@+id/gallery"
@@ -528,7 +528,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/myProfile"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/attendence"
+                app:layout_constraintStart_toEndOf="@+id/marshall"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/gallery_icon" />
 
@@ -539,7 +539,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageView12"
+                app:layout_constraintStart_toEndOf="@+id/marshall"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/profile_icon" />
         </androidx.constraintlayout.widget.ConstraintLayout>

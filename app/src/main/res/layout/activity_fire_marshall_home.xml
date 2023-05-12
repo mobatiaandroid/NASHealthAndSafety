@@ -59,8 +59,9 @@
                 android:id="@+id/slider"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
+
                 android:layout_margin="8dp"
-                app:animate_completion="false"
+                app:animate_completion="true"
                 app:area_margin="14dp"
                 app:border_radius="8dp"
                 app:icon_margin="8dp"
@@ -71,13 +72,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:outer_color="#4ECB71"
                 app:rotate_icon="false"
+
                 app:slider_icon_color="@color/white"
                 app:slider_reversed="true"
                 app:text="SWIPE TO SELF EVACUATE"
                 app:text_color="@color/white"
                 app:text_size="14dp"
                 app:text_style="bold" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -303,22 +304,21 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/attendence"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/home_icon_selected" />
+                app:srcCompat="@drawable/home_icon" />
 
             <ImageView
                 android:id="@+id/attendence"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/gallery"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageView12"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/attendence_icon" />
+                app:srcCompat="@drawable/firefighterhelmet_clicked" />
 
             <ImageView
                 android:id="@+id/gallery"

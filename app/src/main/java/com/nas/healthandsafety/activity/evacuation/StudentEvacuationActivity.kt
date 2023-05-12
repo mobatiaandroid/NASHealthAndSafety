@@ -1,6 +1,7 @@
 package com.nas.healthandsafety.activity.evacuation
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -16,6 +17,7 @@ import com.google.firebase.database.ValueEventListener
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.evacuation.adapter.StudentAdapter
 import com.nas.healthandsafety.activity.evacuation.model.StudentModel
+import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
 import java.time.LocalDateTime
@@ -43,6 +45,13 @@ class StudentEvacuationActivity : AppCompatActivity() {
 //    lateinit var presentEvac: ArrayList<EvacuationStudentModel>
     lateinit var subjectTextView: TextView
     var mDatabaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference
+
+    override fun onBackPressed() {
+        val intent = Intent(context, HomeActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
