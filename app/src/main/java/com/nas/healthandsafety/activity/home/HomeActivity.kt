@@ -12,13 +12,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.evacuation.StudentEvacuationActivity
 import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
+import com.nas.healthandsafety.activity.home.adapter.StudentListAdapter
 import com.nas.healthandsafety.activity.home.model.AssemblyPointsResponseModel
 import com.nas.healthandsafety.activity.home.model.DeviceRegistrationResponseModel
 import com.nas.healthandsafety.activity.home.model.EvacuationStatusResponseModel
@@ -130,6 +134,9 @@ class HomeActivity : AppCompatActivity() {
         callEvacuationStatusAPI()
         callDeviceRegistrationAPI()
         callGetAssemblyPoints()
+        countTextView.setOnClickListener {
+            showStudentListPopUp(context, studentArray)
+        }
         area.text = PreferenceManager.getAssemblyPoint(context)
 
 //    var slideCompleteListener: OnSlideCompleteListener
@@ -203,6 +210,24 @@ class HomeActivity : AppCompatActivity() {
 //        bottomNav.circleColor = Color.RED
 
 
+    }
+
+    private fun showStudentListPopUp(
+        context: Context,
+        studentList: ArrayList<StudentsResponseModel.Data>
+    ) {
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.dialog_student_list, null)
+        val classNameTextView = view.findViewById<TextView>(R.id.className)
+        classNameTextView.text = "Class " + PreferenceManager.getClassName(context)
+        val studentRecycler = view.findViewById<RecyclerView>(R.id.studentRecycler)
+        studentRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        val adapter = StudentListAdapter(context, studentList)
+        studentRecycler.adapter = adapter
+
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun callGetAssemblyPoints() {
@@ -380,7 +405,8 @@ class HomeActivity : AppCompatActivity() {
         var studentsResponse: StudentsResponseModel
         if (AppUtils.isInternetAvailable(context)) {
             val call: Call<StudentsResponseModel> = ApiClient.getClient.getStudents(
-                "Bearer "+PreferenceManager.getAccessToken(context) ,"3"
+                "Bearer " + PreferenceManager.getAccessToken(context),
+                PreferenceManager.getClassID(context)
             )
             progressBarDialog!!.show()
             call.enqueue(object : Callback<StudentsResponseModel> {
@@ -395,16 +421,27 @@ class HomeActivity : AppCompatActivity() {
                                 for (i in studentsResponse.data!!.indices) {
                                     studentArray.add(studentsResponse.data!![i]!!)
                                 }
-                                if (studentArray.size > 10) {
-                                    totalStudentsTextView.text = "10"
+//                                if (studentArray.size > 10) {
+//                                    totalStudentsTextView.text = "10"
+//
+//                                } else {
+                                Log.e("size", studentArray.size.toString())
+                                totalStudentsTextView.text = studentArray.size.toString()
 
-                                } else {
-                                    totalStudentsTextView.text = studentArray.size.toString()
-
-                                }
-
+//                                }
+                                val count = studentArray.size - 3
                                 if (studentArray.size > 4) {
-
+                                    Glide.with(context)
+                                        .load(studentArray[0].profile_photo_path)
+                                        .into(imageA)
+                                    Glide.with(context)
+                                        .load(studentArray[1].profile_photo_path)
+                                        .into(imageB)
+                                    Glide.with(context)
+                                        .load(studentArray[2].profile_photo_path)
+                                        .into(imageC)
+                                    countTextView.visibility = View.VISIBLE
+                                    countTextView.text = "$count+"
                                 } else if (studentArray.size == 3) {
                                     Glide.with(context)
                                         .load(studentArray[0].profile_photo_path)
@@ -415,7 +452,8 @@ class HomeActivity : AppCompatActivity() {
                                     Glide.with(context)
                                         .load(studentArray[2].profile_photo_path)
                                         .into(imageC)
-                                    countTextView.visibility = View.GONE
+                                    countTextView.visibility = View.VISIBLE
+                                    countTextView.text = "$count+"
                                 }else if (studentArray.size == 2) {
                                     Glide.with(context)
                                         .load(studentArray[0].profile_photo_path)

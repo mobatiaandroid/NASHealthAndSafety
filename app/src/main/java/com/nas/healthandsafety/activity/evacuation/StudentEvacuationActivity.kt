@@ -85,6 +85,16 @@ class StudentEvacuationActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
             .child(PreferenceManager.getFireRef(context))
         Log.e("ref", database.toString())
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
         currentClassTextView.setOnClickListener {
             currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
             notFoundClassTextView.setBackgroundResource(0)
@@ -113,10 +123,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
-                        if (studentArray.size > 10) {
-                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-                            studentArray = subArrayList
-                        }
+//                        if (studentArray.size > 10) {
+//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                            studentArray = subArrayList
+//                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -157,10 +167,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
-                        if (studentArray.size > 10) {
-                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-                            studentArray = subArrayList
-                        }
+//                        if (studentArray.size > 10) {
+//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                            studentArray = subArrayList
+//                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -199,10 +209,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     studentAdapter = StudentAdapter(context, ArrayList())
                     studentRecycler.adapter = studentAdapter
                 } else {
-                    if (studentArray.size > 10) {
-                        val subArrayList = ArrayList(studentArray.subList(0, 10))
-                        studentArray = subArrayList
-                    }
+//                    if (studentArray.size > 10) {
+//                        val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                        studentArray = subArrayList
+//                    }
                     studentAdapter = StudentAdapter(context, studentArray)
                     studentRecycler.adapter = studentAdapter
                 }

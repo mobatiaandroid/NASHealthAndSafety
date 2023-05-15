@@ -39,7 +39,7 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
         holder.fullNameTextView.text = item.fullName
         holder.registrationIDTextView.text = item.registrationID
         if (item.evacuated == "1") {
-            holder.switchButton.isChecked = true
+//            holder.switchButton.isChecked = true
             holder.absentOrPresent!!.text = "P"
             holder.absentOrPresent!!.setBackgroundColor(
                 ContextCompat.getColor(
@@ -49,7 +49,7 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
             )
 
         } else {
-            holder.switchButton.isChecked = false
+//            holder.switchButton.isChecked = false
             holder.absentOrPresent!!.text = "A"
             holder.absentOrPresent!!.setBackgroundColor(
                 ContextCompat.getColor(
@@ -60,13 +60,10 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
             }
 
 
-        /*Log.e("designtion",employee_array.get(position).designation.toString())*/
 
 
         holder.switchButton.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            /*database= FirebaseDatabase.getInstance().getReference("StudentLists").
-            child(employee_array.get(position).name.toString()).child("status")*/
             var database: DatabaseReference
             var id = ""
             if (isChecked) {
@@ -75,7 +72,6 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                 val evacuatedRef = database.child("evacuation_students")
                     .child(PreferenceManager.getFireRef(context))
                     .child(studentArray[position].registrationID).child("evacuated")
-//                                    val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
                 Log.e("evacuated ref", evacuatedRef.toString())
                 evacuatedRef.setValue("1")
                 val staffRef = database.child("evacuation_students")
@@ -88,49 +84,6 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                     .child(PreferenceManager.getFireRef(context))
                     .child(studentArray[position].registrationID).child("evacuated_assembly_points")
                 assemblyRef.setValue(PreferenceManager.getAssemblyPoint(context))
-//                database = FirebaseDatabase.getInstance().getReference("evacuation_students")
-//                    .child(PreferenceManager.getFireRef(context))
-//                database.addValueEventListener(object :ValueEventListener{
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        if (snapshot.exists()){
-//                            for (i in snapshot.children) {
-//                                val fullName = i.child("student_name").value.toString()
-//                                if (fullName == item.fullName) {
-//                                    id = i.child("student_id").value.toString()
-//
-//                                    Log.e("Akam",id.toString())
-//                                    val database = FirebaseDatabase.getInstance().reference
-////
-//                                    val evacuatedRef = database.child("evacuation_students").child(PreferenceManager.getFireRef(context)).child(id).child("evacuated")
-////                                    val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
-//                                    Log.e("evacuated ref", evacuatedRef.toString())
-//                                    evacuatedRef.setValue("1")
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        Log.e("wha","pls no print")
-//                    }
-//
-//                })
-//                database = database.child(id)
-//                val database = FirebaseDatabase.getInstance().reference
-//                val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
-//                Log.e("evacuated ref", evacuatedRef.toString())
-//                evacuatedRef.setValue("1")
-                Log.e("path to present", database.toString())
-//                database.child("evacuated").setValue("1").addOnCompleteListener {
-//                    Toast.makeText(
-//                        context,
-//                        "Changed",
-//                        Toast.LENGTH_SHORT
-//                    ).show() }
-                Log.e("Child present", item.fullName)
-                Log.e("path to absent", database.toString())
-
-                Log.e("Checked_Success", isChecked.toString())
                 holder.absentOrPresent!!.text = "P"
                 holder.absentOrPresent!!.setBackgroundColor(
                     ContextCompat.getColor(
@@ -138,18 +91,13 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                         R.color.green
                     )
                 )
-                holder.switchButton.isChecked = true
-
-                /*database.setValue("0")
-                        holder.switch_button.isChecked=true*/
+//                holder.switchButton.isChecked = true
 
             } else {
                 val database = FirebaseDatabase.getInstance().reference
-//
                 val evacuatedRef = database.child("evacuation_students")
                     .child(PreferenceManager.getFireRef(context))
                     .child(studentArray[position].registrationID).child("evacuated")
-//                                    val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
                 Log.e("evacuated ref", evacuatedRef.toString())
                 evacuatedRef.setValue("0")
                 val staffRef = database.child("evacuation_students")
@@ -161,37 +109,6 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                     .child(PreferenceManager.getFireRef(context))
                     .child(studentArray[position].registrationID).child("evacuated_assembly_points")
                 assemblyRef.setValue(PreferenceManager.getAssemblyPoint(context))
-//                database = FirebaseDatabase.getInstance().getReference("evacuation_students")
-//                    .child(PreferenceManager.getFireRef(context))
-//                database = database.child(item.evacuated)
-//                database.addValueEventListener(object :ValueEventListener{
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        if (snapshot.exists()){
-//                            for (i in snapshot.children) {
-//                                val fullName = i.child("student_name").value.toString()
-//                                if (fullName == item.fullName) {
-//                                    id = i.child("student_id").value.toString()
-//
-//                                    Log.e("Akam",id.toString())
-//                                    val database = FirebaseDatabase.getInstance().reference
-////
-//                                    val evacuatedRef = database.child("evacuation_students").child(PreferenceManager.getFireRef(context)).child(id).child("evacuated")
-////                                    val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
-//                                    Log.e("evacuated ref", evacuatedRef.toString())
-//                                    evacuatedRef.setValue("0")
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        Log.e("wha","pls no print")
-//                    }
-//
-//                })
-//                val database = FirebaseDatabase.getInstance().reference
-//                val evacuatedRef = database.child("evacuation_students/"+PreferenceManager.getFireRef(context)+"/"+id+"/evacuated")
-//                evacuatedRef.setValue("0")
                 Log.e("checked_error", isChecked.toString())
                 holder.absentOrPresent!!.text = "A"
                 holder.absentOrPresent!!.setBackgroundColor(
@@ -200,22 +117,13 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                         R.color.pink
                     )
                 )
-                holder.switchButton.isChecked = false
-                /*database.setValue("1")
-                            holder.switch_button.isChecked=false*/
-
+//                holder.switchButton.isChecked = false
             }
-
-
         }
-
-
     }
 
     override fun getItemCount(): Int {
-        /* Log.e("emplyee_list_count", employee_array.size.toString())*/
         var size: Int = studentArray.size
-        /*Log.e("size",size.toString())*/
         if (size == 0) {
             Toast.makeText(context, "No Students Available", Toast.LENGTH_SHORT).show()
         }
