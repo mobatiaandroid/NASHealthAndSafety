@@ -38,6 +38,8 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
         }
         holder.fullNameTextView.text = item.fullName
         holder.registrationIDTextView.text = item.registrationID
+        holder.switchButton.isChecked = item.evacuated == "1"
+
         if (item.evacuated == "1") {
 //            holder.switchButton.isChecked = true
             holder.absentOrPresent!!.text = "P"
@@ -91,7 +93,7 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                         R.color.green
                     )
                 )
-//                holder.switchButton.isChecked = true
+                holder.switchButton.isChecked = true
 
             } else {
                 val database = FirebaseDatabase.getInstance().reference
@@ -117,7 +119,7 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
                         R.color.pink
                     )
                 )
-//                holder.switchButton.isChecked = false
+                holder.switchButton.isChecked = false
             }
         }
     }

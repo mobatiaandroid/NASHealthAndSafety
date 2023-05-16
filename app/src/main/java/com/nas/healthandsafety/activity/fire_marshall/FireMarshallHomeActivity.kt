@@ -37,6 +37,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class FireMarshallHomeActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var marshallButton: ImageView
@@ -160,6 +161,8 @@ class FireMarshallHomeActivity : AppCompatActivity() {
             finish()
         }
         marshallButton.setOnClickListener {
+
+
             val intent = Intent(context, AttendanceActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)

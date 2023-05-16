@@ -85,16 +85,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
             .child(PreferenceManager.getFireRef(context))
         Log.e("ref", database.toString())
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
         currentClassTextView.setOnClickListener {
             currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
             notFoundClassTextView.setBackgroundResource(0)
@@ -111,7 +102,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
                             val temp = StudentModel(studentName, registrationID, section, evacuated)
                             Log.e("class", PreferenceManager.getClassName(context))
                             if (PreferenceManager.getClassName(context).contains(section)) {
-                                studentArray.add(temp)
+                                if (temp.registrationID.toInt() < 10) {
+                                    studentArray.add(temp)
+                                }
                             }
 
 
@@ -123,10 +116,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
-//                        if (studentArray.size > 10) {
-//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-//                            studentArray = subArrayList
-//                        }
+                        if (studentArray.size > 10) {
+                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+                            studentArray = subArrayList
+                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -156,7 +149,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
                             val temp = StudentModel(studentName, registrationID, section, evacuated)
                             Log.e("class", PreferenceManager.getClassName(context))
 //                            if (section == PreferenceManager.getClassName(context)){
-                            studentArray.add(temp)
+                            if (temp.registrationID.toInt() < 10) {
+                                studentArray.add(temp)
+                            }
 //                            }
 
 
@@ -167,10 +162,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList())
                         studentRecycler.adapter = studentAdapter
                     } else {
-//                        if (studentArray.size > 10) {
-//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-//                            studentArray = subArrayList
-//                        }
+                        if (studentArray.size > 10) {
+                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+                            studentArray = subArrayList
+                        }
                         studentAdapter = StudentAdapter(context, studentArray)
                         studentRecycler.adapter = studentAdapter
                     }
@@ -196,9 +191,12 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         val evacuated = i.child("evacuated").value.toString()
                         val temp = StudentModel(studentName, registrationID, section, evacuated)
                         Log.e("class", PreferenceManager.getClassName(context))
-                        Log.e("class", PreferenceManager.getClassName(context))
+                        Log.e("class", section)
                         if (PreferenceManager.getClassName(context).contains(section)) {
-                            studentArray.add(temp)
+                            if (temp.registrationID.toInt() < 10) {
+                                studentArray.add(temp)
+                            }
+
                         }
 
 
@@ -209,10 +207,11 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     studentAdapter = StudentAdapter(context, ArrayList())
                     studentRecycler.adapter = studentAdapter
                 } else {
-//                    if (studentArray.size > 10) {
-//                        val subArrayList = ArrayList(studentArray.subList(0, 10))
-//                        studentArray = subArrayList
-//                    }
+                    if (studentArray.size > 10) {
+                        val subArrayList = ArrayList(studentArray.subList(0, 10))
+                        studentArray = subArrayList
+                    }
+                    Log.e("student list size", studentArray.size.toString())
                     studentAdapter = StudentAdapter(context, studentArray)
                     studentRecycler.adapter = studentAdapter
                 }

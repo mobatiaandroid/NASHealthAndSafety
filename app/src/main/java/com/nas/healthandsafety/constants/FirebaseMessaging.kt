@@ -1,23 +1,27 @@
 package com.nas.healthandsafety.constants
 
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.nas.healthandsafety.BuildConfig
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.home.HomeActivity
 import org.json.JSONException
 import org.json.JSONObject
+
 
 class FirebaseMessaging : FirebaseMessagingService() {
 
@@ -34,18 +38,10 @@ class FirebaseMessaging : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-//        if (remoteMessage!!.data.isNotEmpty()){
-//            try {
-//                val json = JSONObject(remoteMessage.data.toString())
-//                handleDataMessage(json)
-//            }catch (e:Exception){
-//
-//            }
-//        }
-        Log.e("onMessageReceived:", remoteMessage.toString())
 
 
         if (remoteMessage.data.isNotEmpty()) {
+
             try {
                 val json = JSONObject(remoteMessage.data.toString())
                 handleDataMessage(json)
@@ -88,7 +84,6 @@ class FirebaseMessaging : FirebaseMessagingService() {
 
     }
 
-    @SuppressLint("ObsoleteSdkInt")
     private fun sendNotification(messageBody: String?) {
         intent = Intent(this, HomeActivity::class.java)
         intent!!.action = System.currentTimeMillis().toString()
@@ -102,13 +97,25 @@ class FirebaseMessaging : FirebaseMessagingService() {
             notId,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        val c_sound =
+            Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.alertsound)
+
+//        val notificationSoundUri = Uri.parse("android.resource://" + packageName + "/" + R.raw.alertsound)
+//        val soundNotify = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.alertsound);
+//        val resourceId = R.raw.alertsound
+//        val uri = Uri.parse("android.resource://" + packageName + "/" + resourceId)
+//        Log.e("notificati sounf", defaultSoundUri.toString())
+//        Log.e("notificationSoundUri sounf", notificationSoundUri.toString())
+//        Log.e("notificati", soundNotify.toString())
+//        Log.e("notificati", uri.toString())
+
         val notificationBuilder =
             NotificationCompat.Builder(this)
                 .setContentTitle(resources.getString(R.string.app_name))
                 .setContentText(messageBody)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
+                .setSound(c_sound)
                 .setContentIntent(pendingIntent)
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -117,6 +124,11 @@ class FirebaseMessaging : FirebaseMessagingService() {
             val name: CharSequence = getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val mChannel = NotificationChannel(channel_id, name, importance)
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+
             notificationBuilder.setChannelId(mChannel.id)
             mChannel.setShowBadge(true)
             mChannel.canShowBadge()
@@ -124,6 +136,7 @@ class FirebaseMessaging : FirebaseMessagingService() {
             mChannel.lightColor = resources.getColor(R.color.pink)
             mChannel.enableVibration(true)
             mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500)
+            mChannel.setSound(c_sound, audioAttributes)
             notificationManager.createNotificationChannel(mChannel)
         }
 

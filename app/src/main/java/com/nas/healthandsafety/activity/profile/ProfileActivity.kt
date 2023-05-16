@@ -1,19 +1,13 @@
 package com.nas.healthandsafety.activity.profile
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.view.Window
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,7 +17,6 @@ import com.nas.healthandsafety.activity.fire_marshall.FireMarshallHomeActivity
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
 import com.nas.healthandsafety.activity.home.HomeActivity
 import com.nas.healthandsafety.activity.welcome.WelcomeActivity
-import com.nas.healthandsafety.constants.AppUtils
 import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
 
@@ -101,67 +94,69 @@ class ProfileActivity : AppCompatActivity() {
             intent.data = Uri.fromParts("package", packageName, null)
             startActivity(intent)
         }
+//        changePassword.setOnClickListener {
+//            val dialog = Dialog(context)
+//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//            dialog.setCancelable(true)
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            dialog.setContentView(R.layout.change_password_popup)
+//
+//            val currentPassword = dialog.findViewById<View>(R.id.currentPassword) as EditText
+//            val newPassword = dialog.findViewById<View>(R.id.newPassword) as EditText
+//            val confirmPassword = dialog.findViewById<View>(R.id.confirmPassword) as EditText
+//            val submit = dialog.findViewById<View>(R.id.submit)
+//            submit.isEnabled = false
+//            val editTexts = listOf(currentPassword, newPassword, confirmPassword)
+//            for (editText in editTexts) {
+//                editText.addTextChangedListener(object : TextWatcher {
+//                    override fun onTextChanged(
+//                        s: CharSequence,
+//                        start: Int,
+//                        before: Int,
+//                        count: Int,
+//                    ) {
+//                        var et1 = currentPassword.text.toString().trim()
+//                        var et2 = newPassword.text.toString().trim()
+//                        var et3 = confirmPassword.text.toString().trim()
+//
+//                        submit.isEnabled = et1.isNotEmpty()
+//                                && et2.isNotEmpty()
+//                                && et3.isNotEmpty()
+//                        if (submit.isEnabled) {
+//                            submit.setBackgroundResource(R.drawable.rounded_sign_in)
+//                        } else {
+//                            submit.setBackgroundResource(R.drawable.create_account_disabled)
+//                        }
+//                    }
+//
+//                    override fun beforeTextChanged(
+//                        s: CharSequence, start: Int, count: Int, after: Int,
+//                    ) {
+//                    }
+//
+//                    override fun afterTextChanged(
+//                        s: Editable,
+//                    ) {
+//                    }
+//                })
+//            }
+//            submit.setOnClickListener {
+//                if (currentPassword.text.toString() == "" || newPassword.text.toString() == "" || confirmPassword.text.toString() == ""
+//                ) {
+//                    AppUtils.showMessagePopUp(context, "Field cannot be empty.")
+//                } else if (newPassword.text.toString() != confirmPassword.text.toString()) {
+//                    AppUtils.showMessagePopUp(context, "Passwords do not match")
+//                } else {
+////                    TODO
+////                    changePasswordAPICall(currentPassword.text.toString(),newPassword.text.toString())
+//                }
+//            }
+//
+//            dialog.show()
+//        }
         changePassword.setOnClickListener {
-            val dialog = Dialog(context)
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setCancelable(true)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.setContentView(R.layout.change_password_popup)
-
-            val currentPassword = dialog.findViewById<View>(R.id.currentPassword) as EditText
-            val newPassword = dialog.findViewById<View>(R.id.newPassword) as EditText
-            val confirmPassword = dialog.findViewById<View>(R.id.confirmPassword) as EditText
-            val submit = dialog.findViewById<View>(R.id.submit)
-            submit.isEnabled = false
-            val editTexts = listOf(currentPassword, newPassword, confirmPassword)
-            for (editText in editTexts) {
-                editText.addTextChangedListener(object : TextWatcher {
-                    override fun onTextChanged(
-                        s: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int,
-                    ) {
-                        var et1 = currentPassword.text.toString().trim()
-                        var et2 = newPassword.text.toString().trim()
-                        var et3 = confirmPassword.text.toString().trim()
-
-                        submit.isEnabled = et1.isNotEmpty()
-                                && et2.isNotEmpty()
-                                && et3.isNotEmpty()
-                        if (submit.isEnabled) {
-                            submit.setBackgroundResource(R.drawable.rounded_sign_in)
-                        } else {
-                            submit.setBackgroundResource(R.drawable.create_account_disabled)
-                        }
-                    }
-
-                    override fun beforeTextChanged(
-                        s: CharSequence, start: Int, count: Int, after: Int,
-                    ) {
-                    }
-
-                    override fun afterTextChanged(
-                        s: Editable,
-                    ) {
-                    }
-                })
-            }
-            submit.setOnClickListener {
-                if (currentPassword.text.toString() == "" || newPassword.text.toString() == "" || confirmPassword.text.toString() == ""
-                ) {
-                    AppUtils.showMessagePopUp(context, "Field cannot be empty.")
-                } else if (newPassword.text.toString() != confirmPassword.text.toString()) {
-                    AppUtils.showMessagePopUp(context, "Passwords do not match")
-                } else {
-//                    TODO
-//                    changePasswordAPICall(currentPassword.text.toString(),newPassword.text.toString())
-                }
-            }
-
-            dialog.show()
+            Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
         }
-
         homeButton.setOnClickListener {
 //            if (PreferenceManager.getIsFireMarshall(context)){
 //                val intent = Intent(context, FireMarshallHomeActivity::class.java)
