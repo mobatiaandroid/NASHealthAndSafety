@@ -195,6 +195,8 @@ class ProfileActivity : AppCompatActivity() {
                 .setPositiveButton("Yes") { dialog, id ->
 //                    TODO
 //                    signOutCall()
+                    PreferenceManager.setAccessToken(context, "")
+                    PreferenceManager.setStaffID(context, "")
                     val intent = Intent(context, WelcomeActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
