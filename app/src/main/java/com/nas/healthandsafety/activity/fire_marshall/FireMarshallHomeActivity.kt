@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.gson.JsonObject
 import com.nas.healthandsafety.R
-import com.nas.healthandsafety.activity.attendance.AttendanceActivity
 import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
 import com.nas.healthandsafety.activity.gallery.GalleryActivity
@@ -163,7 +162,7 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         marshallButton.setOnClickListener {
 
 
-            val intent = Intent(context, AttendanceActivity::class.java)
+            val intent = Intent(context, FireMarshallHomeActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()

@@ -18,6 +18,9 @@
         android:theme="@style/Theme.NASHandS"
         tools:targetApi="31">
         <activity
+            android:name=".activity.evacuation.SummaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.fire_marshall.StaffsStatusActivity"
             android:exported="false" />
         <activity
@@ -49,7 +52,7 @@
             android:name=".activity.evacuation.StudentEvacuationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.NASHandS" />
         <activity
             android:name=".activity.profile.ProfileActivity"
             android:exported="false"

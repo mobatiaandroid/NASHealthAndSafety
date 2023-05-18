@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,6 +30,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
     lateinit var progressBarDialog: ProgressBarDialog
     lateinit var firebaseID: String
     lateinit var firebaseReference: String
+    lateinit var viewSummaryButton: MaterialButton
 
     //    lateinit var studentList: ArrayList<EvacuationStudentModel>
     lateinit var classNameTextView: TextView
@@ -39,6 +42,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
     lateinit var studentArray: ArrayList<StudentModel>
     lateinit var studentAdapter: StudentAdapter
     lateinit var tabLayout: TabLayout
+
 
 
     //    lateinit var absentEvac: ArrayList<EvacuationStudentModel>
@@ -64,8 +68,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
         classNameTextView = findViewById(R.id.className)
         currentClassTextView = findViewById(R.id.currentClassTextView)
         notFoundClassTextView = findViewById(R.id.notFoundClassTextView)
-
+        viewSummaryButton = findViewById(R.id.viewSummaryButton)
         currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
+        PreferenceManager.setScrollPos(context, "0")
 //        tabLayout = findViewById(R.id.tabLayout)
 //        val firstTab : TabLayout.Tab = tabLayout.newTab()
 //        firstTab.setText("Current Class"); // set the Text for the first
@@ -85,7 +90,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
             .child(PreferenceManager.getFireRef(context))
         Log.e("ref", database.toString())
-
+        val layoutManager = studentRecycler.layoutManager
+        val currentPosition = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        viewSummaryButton.setOnClickListener {
+            val intent = Intent(context, SummaryActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
         currentClassTextView.setOnClickListener {
             currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
             notFoundClassTextView.setBackgroundResource(0)
@@ -102,26 +114,40 @@ class StudentEvacuationActivity : AppCompatActivity() {
                             val temp = StudentModel(studentName, registrationID, section, evacuated)
                             Log.e("class", PreferenceManager.getClassName(context))
                             if (PreferenceManager.getClassName(context).contains(section)) {
-                                if (temp.registrationID.toInt() < 10) {
-                                    studentArray.add(temp)
-                                }
+//                                if (temp.registrationID.toInt() < 10) {
+                                studentArray.add(temp)
+//                                }
                             }
 
 
                         }
                     }
+                    studentRecycler.post {
+                        studentRecycler.scrollToPosition(currentPosition)
+                    }
                     if (studentArray.isEmpty()) {
 //                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
 
-                        studentAdapter = StudentAdapter(context, ArrayList())
+
+                        studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
                     } else {
-                        if (studentArray.size > 10) {
-                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-                            studentArray = subArrayList
-                        }
-                        studentAdapter = StudentAdapter(context, studentArray)
+//                        if (studentArray.size > 10) {
+//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                            studentArray = subArrayList
+//                        }
+                        studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
                     }
                     Log.e("size", studentArray.size.toString())
 
@@ -149,31 +175,46 @@ class StudentEvacuationActivity : AppCompatActivity() {
                             val temp = StudentModel(studentName, registrationID, section, evacuated)
                             Log.e("class", PreferenceManager.getClassName(context))
 //                            if (section == PreferenceManager.getClassName(context)){
-                            if (temp.registrationID.toInt() < 10) {
-                                studentArray.add(temp)
-                            }
+//                            if (temp.registrationID.toInt() < 10) {
+                            studentArray.add(temp)
+//                            }
 //                            }
 
 
                         }
                     }
+                    studentRecycler.post {
+                        studentRecycler.scrollToPosition(currentPosition)
+                    }
                     if (studentArray.isEmpty()) {
 //                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
-                        studentAdapter = StudentAdapter(context, ArrayList())
+                        studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
                     } else {
-                        if (studentArray.size > 10) {
-                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-                            studentArray = subArrayList
-                        }
-                        studentAdapter = StudentAdapter(context, studentArray)
+//                        if (studentArray.size > 10) {
+//                            val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                            studentArray = subArrayList
+//                        }
+                        studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
                     }
 
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("err", "error")
+                    Toast.makeText(context, "Errror Occurred", Toast.LENGTH_SHORT).show()
+
                 }
 
             })
@@ -193,9 +234,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         Log.e("class", PreferenceManager.getClassName(context))
                         Log.e("class", section)
                         if (PreferenceManager.getClassName(context).contains(section)) {
-                            if (temp.registrationID.toInt() < 10) {
+//                            if (temp.registrationID.toInt() < 10) {
                                 studentArray.add(temp)
-                            }
+//                            }
 
                         }
 
@@ -204,16 +245,26 @@ class StudentEvacuationActivity : AppCompatActivity() {
                 }
                 if (studentArray.isEmpty()) {
 //                    Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
-                    studentAdapter = StudentAdapter(context, ArrayList())
+                    studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                     studentRecycler.adapter = studentAdapter
+                    studentRecycler.layoutManager!!.scrollToPosition(
+                        PreferenceManager.getScrollPos(
+                            context
+                        ).toInt()
+                    )
                 } else {
-                    if (studentArray.size > 10) {
-                        val subArrayList = ArrayList(studentArray.subList(0, 10))
-                        studentArray = subArrayList
-                    }
+//                    if (studentArray.size > 10) {
+//                        val subArrayList = ArrayList(studentArray.subList(0, 10))
+//                        studentArray = subArrayList
+//                    }
                     Log.e("student list size", studentArray.size.toString())
-                    studentAdapter = StudentAdapter(context, studentArray)
+                    studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                     studentRecycler.adapter = studentAdapter
+                    studentRecycler.layoutManager!!.scrollToPosition(
+                        PreferenceManager.getScrollPos(
+                            context
+                        ).toInt()
+                    )
                 }
             }
 

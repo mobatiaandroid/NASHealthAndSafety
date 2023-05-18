@@ -320,5 +320,7 @@ class PreferenceManager {
             pos = sharedPreferences.getString("pos", "").toString()
             return pos
         }
+
+
     }
 }

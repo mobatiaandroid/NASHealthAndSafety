@@ -74,9 +74,10 @@ class MarshallEvacuationActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     count = 0
                     maxCount = snapshot.childrenCount.toInt()
-                    if (maxCount > 10) {
-                        maxCount = 10
-                    }
+//                    if (maxCount > 10) {
+//                        maxCount = 10
+//                    }
+
                     arcProgress.max = maxCount
                     for (i in snapshot.children) {
                         if (i.child("evacuated").value.toString() == "1") {

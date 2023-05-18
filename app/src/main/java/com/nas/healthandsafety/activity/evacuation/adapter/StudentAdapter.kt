@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.evacuation.model.StudentModel
@@ -21,7 +20,11 @@ import com.nas.healthandsafety.constants.PreferenceManager
  * Created by Arshad on 15,March,2022
  */
 
-class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentModel>) :
+class StudentAdapter(
+    val context: Context,
+    var studentArray: ArrayList<StudentModel>,
+    var studentRecycler: RecyclerView
+) :
     RecyclerView.Adapter<StudentAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,96 +34,37 @@ class StudentAdapter(val context: Context, var studentArray: ArrayList<StudentMo
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var item: StudentModel = studentArray.get(position)
+//
+        val item: StudentModel = studentArray[position]
+        // Set the click listener for the item
         holder.itemView.setOnClickListener {
             Log.e("student name", item.fullName)
-
         }
+
+        // Set the student's information
         holder.fullNameTextView.text = item.fullName
         holder.registrationIDTextView.text = item.registrationID
+
+        // Set the state of the Switch
+        holder.switchButton.setOnCheckedChangeListener(null) // Remove previous listener to avoid conflicts
         holder.switchButton.isChecked = item.evacuated == "1"
 
-        if (item.evacuated == "1") {
-//            holder.switchButton.isChecked = true
-            holder.absentOrPresent!!.text = "P"
-            holder.absentOrPresent!!.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.green
-                )
-            )
+        // Set the text and background color based on the evacuated state
+        val evacuatedText = if (item.evacuated == "1") "P" else "A"
+        val evacuatedColor = if (item.evacuated == "1") R.color.green else R.color.pink
+        holder.absentOrPresent.text = evacuatedText
+        holder.absentOrPresent.setBackgroundColor(ContextCompat.getColor(context, evacuatedColor))
 
-        } else {
-//            holder.switchButton.isChecked = false
-            holder.absentOrPresent!!.text = "A"
-            holder.absentOrPresent!!.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.pink
-                )
-            )
-            }
+        // Set the listener for the Switch state change
+        holder.switchButton.setOnCheckedChangeListener { _, isChecked ->
+            PreferenceManager.setScrollPos(context, position.toString())
+            val database = FirebaseDatabase.getInstance().reference
+            val evacuatedRef = database.child("evacuation_students")
+                .child(PreferenceManager.getFireRef(context))
+                .child(studentArray[position].registrationID).child("evacuated")
+            evacuatedRef.setValue(if (isChecked) 1 else 0)
 
-
-
-
-        holder.switchButton.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            var database: DatabaseReference
-            var id = ""
-            if (isChecked) {
-                val database = FirebaseDatabase.getInstance().reference
-//
-                val evacuatedRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated")
-                Log.e("evacuated ref", evacuatedRef.toString())
-                evacuatedRef.setValue("1")
-                val staffRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated_by")
-                staffRef.setValue(PreferenceManager.getStaffName(context))
-                Log.e("staffname", PreferenceManager.getStaffName(context))
-
-                val assemblyRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated_assembly_points")
-                assemblyRef.setValue(PreferenceManager.getAssemblyPoint(context))
-                holder.absentOrPresent!!.text = "P"
-                holder.absentOrPresent!!.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.green
-                    )
-                )
-                holder.switchButton.isChecked = true
-
-            } else {
-                val database = FirebaseDatabase.getInstance().reference
-                val evacuatedRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated")
-                Log.e("evacuated ref", evacuatedRef.toString())
-                evacuatedRef.setValue("0")
-                val staffRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated_by")
-                staffRef.setValue(PreferenceManager.getStaffName(context))
-                Log.e("staffname", PreferenceManager.getStaffName(context))
-                val assemblyRef = database.child("evacuation_students")
-                    .child(PreferenceManager.getFireRef(context))
-                    .child(studentArray[position].registrationID).child("evacuated_assembly_points")
-                assemblyRef.setValue(PreferenceManager.getAssemblyPoint(context))
-                Log.e("checked_error", isChecked.toString())
-                holder.absentOrPresent!!.text = "A"
-                holder.absentOrPresent!!.setBackgroundColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.pink
-                    )
-                )
-                holder.switchButton.isChecked = false
-            }
+            // Rest of the code for updating Firebase and UI based on the Switch state change
         }
     }
 
