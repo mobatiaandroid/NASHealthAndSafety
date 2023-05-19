@@ -38,7 +38,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
     lateinit var firebaseReference: String
     lateinit var viewSummaryButton: MaterialButton
     lateinit var evacuationTitleTextView: TextView
-
+//
     //    lateinit var studentList: ArrayList<EvacuationStudentModel>
     lateinit var classNameTextView: TextView
     lateinit var dateTextView: TextView
