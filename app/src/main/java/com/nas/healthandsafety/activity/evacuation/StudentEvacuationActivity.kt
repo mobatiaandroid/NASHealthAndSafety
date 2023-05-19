@@ -30,6 +30,7 @@ import com.nas.healthandsafety.constants.PreferenceManager
 import com.nas.healthandsafety.constants.ProgressBarDialog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class StudentEvacuationActivity : AppCompatActivity() {
     lateinit var context: Context
@@ -47,7 +48,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
     lateinit var studentRecycler: RecyclerView
     private lateinit var database: DatabaseReference
     lateinit var studentArray: ArrayList<StudentModel>
+    lateinit var searchArray: ArrayList<StudentModel>
     lateinit var studentAdapter: StudentAdapter
+    lateinit var searchAdapter: StudentAdapter
     lateinit var tabLayout: TabLayout
     lateinit var searchIcon: ImageView
     lateinit var searchView: View
@@ -89,11 +92,18 @@ class StudentEvacuationActivity : AppCompatActivity() {
         searchText = findViewById(R.id.searchText)
         searchClose = findViewById(R.id.searchClose)
         backButton = findViewById(R.id.back_button)
+        searchArray = ArrayList()
         searchRecyclerView = findViewById(R.id.searchRecycler)
         searchRecyclerView.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.VERTICAL, false
         )
+        backButton.setOnClickListener {
+            val intent = Intent(context, HomeActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
         searchIcon.setOnClickListener {
             searchView.visibility = View.VISIBLE
             evacuationTitleTextView.visibility = View.GONE
@@ -125,6 +135,10 @@ class StudentEvacuationActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s!!.length > 1) {
                     searchFilter(s.toString())
+                } else if (s.isEmpty()) {
+                    searchArray = ArrayList()
+                    searchRecyclerView.adapter =
+                        StudentAdapter(context, searchArray, searchRecyclerView)
                 }
             }
 
@@ -337,49 +351,52 @@ class StudentEvacuationActivity : AppCompatActivity() {
 
     private fun searchFilter(searchText: String) {
         database = FirebaseDatabase.getInstance().getReference("evacuation_students")
+            .child(PreferenceManager.getFireRef(context))
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.exists()) {
-//                    studentArray = ArrayList()
-//                    for (i in snapshot.children) {
-//                        val studentName = i.child("student_name").value.toString()
-//                        val registrationID = i.child("student_id").value.toString()
-//                        val section = i.child("student_class_section").value.toString()
-//                        val evacuated = i.child("evacuated").value.toString()
-//                        val temp = StudentModel(studentName, registrationID, section, evacuated)
-//                        Log.e("class", PreferenceManager.getClassName(context))
-////                            if (section == PreferenceManager.getClassName(context)){
-////                            if (temp.registrationID.toInt() < 10) {
-//                        studentArray.add(temp)
-////                            }
-////                            }
-//
-//
-//                    }
-//                }
-//
-//                if (studentArray.isEmpty()) {
-////                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
-//                    studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
-//                    studentRecycler.adapter = studentAdapter
-//                    studentRecycler.layoutManager!!.scrollToPosition(
-//                        PreferenceManager.getScrollPos(
-//                            context
-//                        ).toInt()
-//                    )
-//                } else {
-////                        if (studentArray.size > 10) {
-////                            val subArrayList = ArrayList(studentArray.subList(0, 10))
-////                            studentArray = subArrayList
-////                        }
-//                    studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
-//                    studentRecycler.adapter = studentAdapter
-//                    studentRecycler.layoutManager!!.scrollToPosition(
-//                        PreferenceManager.getScrollPos(
-//                            context
-//                        ).toInt()
-//                    )
-//                }
+                if (snapshot.exists()) {
+                    searchArray = ArrayList()
+                    for (i in snapshot.children) {
+                        val studentName = i.child("student_name").value.toString()
+                        val registrationID = i.child("student_id").value.toString()
+                        val section = i.child("student_class_section").value.toString()
+                        val evacuated = i.child("evacuated").value.toString()
+                        val temp = StudentModel(studentName, registrationID, section, evacuated)
+                        Log.e("name", temp.fullName)
+                        //                            if (section == PreferenceManager.getClassName(context)){
+//                            if (temp.registrationID.toInt() < 10) {
+
+                        if (studentName.lowercase(Locale.getDefault())
+                                .contains(searchText.lowercase(Locale.getDefault())) || registrationID.lowercase(
+                                Locale.getDefault()
+                            )
+                                .contains(
+                                    searchText.lowercase(Locale.getDefault())
+                                )
+                        ) {
+                            Log.e("search success", temp.fullName)
+                            searchArray.add(temp)
+                        } else {
+                            Log.e("search fail", temp.fullName)
+                        }
+//                            }
+//                            }
+
+
+                    }
+                }
+
+                if (searchArray.isEmpty()) {
+                    searchRecyclerView.visibility = View.GONE
+                    searchAdapter = StudentAdapter(context, ArrayList(), searchRecyclerView)
+                    searchRecyclerView.adapter = searchAdapter
+
+                } else {
+
+                    searchRecyclerView.visibility = View.VISIBLE
+                    searchAdapter = StudentAdapter(context, searchArray, searchRecyclerView)
+                    searchRecyclerView.adapter = searchAdapter
+                }
 
             }
 

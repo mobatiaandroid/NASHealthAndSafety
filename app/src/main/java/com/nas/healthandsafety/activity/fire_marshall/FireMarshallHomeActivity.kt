@@ -35,6 +35,8 @@ import com.ncorti.slidetoact.SlideToActView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
+import java.util.Date
 
 
 class FireMarshallHomeActivity : AppCompatActivity() {
@@ -61,8 +63,9 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 //    lateinit var imageB: ImageView
 //    lateinit var imageC: ImageView
 //    lateinit var count: TextView
-//    lateinit var greeting: TextView
-//    lateinit var totalStudents: TextView
+    lateinit var greeting: TextView
+
+    //    lateinit var totalStudents: TextView
 //    lateinit var presentStudents: TextView
 //    lateinit var absentStudents: TextView
 //    lateinit var subject: TextView
@@ -97,10 +100,13 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         slider = findViewById(R.id.slider)
         button1 = findViewById(R.id.button23)
         button2 = findViewById(R.id.button2)
+        greeting = findViewById(R.id.greeting)
 
-
+        greetingSetter()
         callDeviceRegistrationAPI()
         callEvacuationStatusAPI()
+
+
         button1.setOnClickListener {
             Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
         }
@@ -184,6 +190,24 @@ class FireMarshallHomeActivity : AppCompatActivity() {
         evacuateButton.setOnClickListener {
 //            showSelectEmergencyPopUp()
             notifyStaffAPICall()
+        }
+    }
+
+    private fun greetingSetter() {
+        val date = Date()
+        val cal: Calendar = Calendar.getInstance()
+        cal.time = date
+        val hour: Int = cal.get(Calendar.HOUR_OF_DAY)
+        if (hour in 6..12) {
+            greeting.text = "Good Morning !"
+        } else if (hour == 12) {
+            greeting.text = "Noon !"
+        } else if (hour in 13..16) {
+            greeting.text = "Good Afternoon !"
+        } else if (hour in 16..22) {
+            greeting.text = "Good Evening !"
+        } else {
+            greeting.text = "Good Night !"
         }
     }
 

@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.home.model.StudentsResponseModel
 
@@ -27,7 +29,8 @@ class StudentListAdapter(
 
         holder.fullNameTextView.text = studentArray[position].full_name
         holder.registrationIDTextView.text = studentArray[position].id.toString()
-
+        Glide.with(context).load(studentArray[position].profile_photo_path)
+            .into(holder.studentImage)
 
         /*Log.e("designtion",employee_array.get(position).designation.toString())*/
 
@@ -49,6 +52,7 @@ class StudentListAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var fullNameTextView = itemView.findViewById<TextView>(R.id.studentName)
         var registrationIDTextView = itemView.findViewById<TextView>(R.id.studentID)
+        var studentImage = itemView.findViewById<ImageView>(R.id.studentImage)
 
 
     }

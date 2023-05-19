@@ -26,11 +26,22 @@ class SummaryActivity : AppCompatActivity() {
     lateinit var totalStudentsTextView: TextView
     lateinit var foundStudentsTextView: TextView
     lateinit var notFoundStudentsTextView: TextView
+    lateinit var currentClassCountTextView: TextView
+    lateinit var otherClassCountTextView: TextView
     lateinit var backImageView: ImageView
     private lateinit var database: DatabaseReference
     var totalStudentsCount = 0
     var foundStudentsCount = 0
     var notFoundStudentsCount = 0
+    var currentClassCount = 0
+    var otherClassCount = 0
+
+    override fun onBackPressed() {
+        val intent = Intent(context, StudentEvacuationActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +59,8 @@ class SummaryActivity : AppCompatActivity() {
         foundStudentsTextView = findViewById(R.id.presentStudents)
         notFoundStudentsTextView = findViewById(R.id.absentStudents)
         backImageView = findViewById(R.id.back_button)
+        currentClassCountTextView = findViewById(R.id.currentClassCount)
+        otherClassCountTextView = findViewById(R.id.otherClassCount)
 
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("E MMM dd yyyy")
@@ -67,12 +80,34 @@ class SummaryActivity : AppCompatActivity() {
                     for (i in snapshot.children) {
                         if (i.child("evacuated").value.toString() == "1") {
                             foundStudentsCount += 1
+
+                            if (!i.child("evacuated_assembly_points").value.toString()
+                                    .equals(i.child("student_assembly_points").value.toString())
+                            ) {
+                                otherClassCount += 1
+                            }
+
+
                         }
+                        if (PreferenceManager.getClassName(context).contains(
+                                i.child("student_class_section").value.toString().replace(" ", "")
+                            )
+                        ) {
+                            if (i.child("evacuated_assembly_points").value.toString()
+                                    .equals(i.child("student_assembly_points").value.toString())
+                            ) {
+                                currentClassCount += 1
+                            }
+                        }
+
                     }
                     notFoundStudentsCount = totalStudentsCount - foundStudentsCount
+//                    otherClassCount = totalStudentsCount - currentClassCount
                     totalStudentsTextView.text = totalStudentsCount.toString()
                     foundStudentsTextView.text = foundStudentsCount.toString()
                     notFoundStudentsTextView.text = notFoundStudentsCount.toString()
+                    currentClassCountTextView.text = currentClassCount.toString()
+                    otherClassCountTextView.text = otherClassCount.toString()
                 }
 
 
@@ -89,5 +124,6 @@ class SummaryActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
             finish()
         }
+
     }
 }

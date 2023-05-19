@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
@@ -61,8 +60,14 @@ class StudentAdapter(
             val database = FirebaseDatabase.getInstance().reference
             val evacuatedRef = database.child("evacuation_students")
                 .child(PreferenceManager.getFireRef(context))
-                .child(studentArray[position].registrationID).child("evacuated")
-            evacuatedRef.setValue(if (isChecked) 1 else 0)
+                .child(studentArray[position].registrationID)
+            evacuatedRef.child("evacuated").setValue(if (isChecked) 1 else 0)
+            if (isChecked) {
+                evacuatedRef.child("evacuated_assembly_points")
+                    .setValue(PreferenceManager.getAssemblyPoint(context))
+                evacuatedRef.child("evacuated_by").setValue(PreferenceManager.getStaffName(context))
+            }
+
 
             // Rest of the code for updating Firebase and UI based on the Switch state change
         }
@@ -70,9 +75,7 @@ class StudentAdapter(
 
     override fun getItemCount(): Int {
         var size: Int = studentArray.size
-        if (size == 0) {
-            Toast.makeText(context, "No Students Available", Toast.LENGTH_SHORT).show()
-        }
+
         return studentArray.size
 
 

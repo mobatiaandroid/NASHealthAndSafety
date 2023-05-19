@@ -1,5 +1,6 @@
 package com.nas.healthandsafety.activity.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -95,7 +96,23 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        exit(0)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setMessage("Are you sure you want to exit?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id ->
+//                    TODO
+//                    signOutCall()
+                PreferenceManager.setAccessToken(context, "")
+                PreferenceManager.setStaffID(context, "")
+                exit(0)
+            }
+            .setNegativeButton(
+                "No"
+            ) { dialog, id -> //  Action for 'NO' Button
+                dialog.cancel()
+            }
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 
     //    var database = Firebase.database

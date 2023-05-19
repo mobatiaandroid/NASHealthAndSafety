@@ -187,15 +187,22 @@
             android:layout_height="wrap_content">
 
             <View
+                android:id="@+id/view4"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:layout_margin="8dp"
                 android:background="@color/grey"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline21"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.55" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"
@@ -322,6 +329,55 @@
                 android:text="Assembly Point"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/currentClassCountTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Current Class"
+                android:textColor="#b2b2b2"
+
+                app:layout_constraintBottom_toTopOf="@+id/otherClassCountTV"
+                app:layout_constraintEnd_toStartOf="@+id/currentClassCount"
+                app:layout_constraintStart_toEndOf="@+id/presentStudents"
+                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+            <TextView
+                android:id="@+id/otherClassCountTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Others"
+                android:textColor="#b2b2b2"
+
+                app:layout_constraintBottom_toBottomOf="@+id/presentStudents"
+                app:layout_constraintEnd_toStartOf="@+id/otherClassCount"
+                app:layout_constraintStart_toEndOf="@+id/presentStudents"
+                app:layout_constraintTop_toBottomOf="@+id/currentClassCountTV" />
+
+            <TextView
+                android:id="@+id/currentClassCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/currentClassCountTV"
+                app:layout_constraintStart_toEndOf="@+id/currentClassCountTV"
+                app:layout_constraintTop_toTopOf="@+id/currentClassCountTV" />
+
+            <TextView
+                android:id="@+id/otherClassCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/otherClassCountTV"
+                app:layout_constraintStart_toEndOf="@+id/otherClassCountTV"
+                app:layout_constraintTop_toTopOf="@+id/otherClassCountTV" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -435,4 +491,5 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.508" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
