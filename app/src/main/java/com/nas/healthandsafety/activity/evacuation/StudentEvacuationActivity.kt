@@ -164,7 +164,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
             .child(PreferenceManager.getFireRef(context))
         Log.e("ref", database.toString())
         val layoutManager = studentRecycler.layoutManager
-        val currentPosition = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//        val currentPosition = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         viewSummaryButton.setOnClickListener {
             val intent = Intent(context, SummaryActivity::class.java)
             startActivity(intent)
@@ -195,9 +195,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
 
                         }
                     }
-                    studentRecycler.post {
-                        studentRecycler.scrollToPosition(currentPosition)
-                    }
+//                    studentRecycler.post {
+//                        studentRecycler.scrollToPosition(currentPosition)
+//                    }
                     if (studentArray.isEmpty()) {
 //                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
 
@@ -256,9 +256,9 @@ class StudentEvacuationActivity : AppCompatActivity() {
 
                         }
                     }
-                    studentRecycler.post {
-                        studentRecycler.scrollToPosition(currentPosition)
-                    }
+//                    studentRecycler.post {
+//                        studentRecycler.scrollToPosition(currentPosition)
+//                    }
                     if (studentArray.isEmpty()) {
 //                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
                         studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)

@@ -76,6 +76,11 @@ class SummaryActivity : AppCompatActivity() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    totalStudentsCount = 0
+                    foundStudentsCount = 0
+                    notFoundStudentsCount = 0
+                    currentClassCount = 0
+                    otherClassCount = 0
                     totalStudentsCount = snapshot.childrenCount.toInt()
                     for (i in snapshot.children) {
                         if (i.child("evacuated").value.toString() == "1") {

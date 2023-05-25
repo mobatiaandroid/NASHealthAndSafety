@@ -43,7 +43,7 @@
         android:id="@+id/textView4"
         android:layout_width="270dp"
         android:layout_height="40dp"
-        android:text="Welcome to NAS Dubai Teachers Mobile Application "
+        android:text="Welcome to NAS Health and Safety Mobile Application "
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
