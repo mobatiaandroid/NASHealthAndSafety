@@ -11,6 +11,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.github.lzyzsd.circleprogress.ArcProgress
@@ -35,6 +36,7 @@ import retrofit2.Response
 class MarshallEvacuationActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var arcProgress: ArcProgress
+    lateinit var backButton: ImageView
     lateinit var evacuationEndButton: ExtendedFloatingActionButton
     lateinit var progressBarDialog: ProgressBarDialog
     private lateinit var database: DatabaseReference
@@ -55,10 +57,17 @@ class MarshallEvacuationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_marshall_evacuation)
         context = this
         progressBarDialog = ProgressBarDialog(context)
+        backButton = findViewById(R.id.back_button)
         arcProgress = findViewById(R.id.arcProgress)
         evacuationEndButton = findViewById(R.id.floatingActionButton)
         evacuationEndButton.setOnClickListener {
             callEndEvacuationAPI()
+        }
+        backButton.setOnClickListener {
+            val intent = Intent(context, FireMarshallHomeActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
         }
         handler = Handler(Looper.getMainLooper())
 

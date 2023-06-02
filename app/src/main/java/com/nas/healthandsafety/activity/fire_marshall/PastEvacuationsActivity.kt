@@ -1,7 +1,9 @@
 package com.nas.healthandsafety.activity.fire_marshall
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,7 @@ import retrofit2.Response
 class PastEvacuationsActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var pastEvacuationsRecycler: RecyclerView
+    lateinit var backButton: ImageView
     lateinit var progressBarDialog: ProgressBarDialog
     var evacuationsList: ArrayList<EvacuationStatusResponseModel.Data> = ArrayList()
     lateinit var evacuationAdapter: PastEvacautionAdapter
@@ -33,9 +36,15 @@ class PastEvacuationsActivity : AppCompatActivity() {
 
     private fun initialiseUI() {
         context = this
+        backButton = findViewById(R.id.back_button)
         pastEvacuationsRecycler = findViewById(R.id.pastEvacuationsRecycler)
         progressBarDialog = ProgressBarDialog(context)
-
+        backButton.setOnClickListener {
+            val intent = Intent(context, MarshallEvacuationActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            finish()
+        }
 
     }
 
@@ -59,7 +68,11 @@ class PastEvacuationsActivity : AppCompatActivity() {
                         if (evacuationStatusResponse.status == 200) {
                             if (evacuationStatusResponse.data!!.isNotEmpty()) {
                                 for (i in evacuationStatusResponse.data!!.indices) {
+
+
                                     evacuationsList.add(evacuationStatusResponse.data!![i]!!)
+
+
                                 }
                                 evacuationAdapter = PastEvacautionAdapter(context, evacuationsList)
                                 pastEvacuationsRecycler.layoutManager =

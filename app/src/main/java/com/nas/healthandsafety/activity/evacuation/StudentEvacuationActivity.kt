@@ -204,11 +204,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
 
                         studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
-                        studentRecycler.layoutManager!!.scrollToPosition(
-                            PreferenceManager.getScrollPos(
-                                context
-                            ).toInt()
-                        )
+                        if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            studentRecycler.layoutManager!!.scrollToPosition(
+                                PreferenceManager.getScrollPos(
+                                    context
+                                ).toInt()
+                            )
+                            PreferenceManager.setScrollPos(context, "")
+                        }
                     } else {
 //                        if (studentArray.size > 10) {
 //                            val subArrayList = ArrayList(studentArray.subList(0, 10))
@@ -216,11 +219,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
 //                        }
                         studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
-                        studentRecycler.layoutManager!!.scrollToPosition(
-                            PreferenceManager.getScrollPos(
-                                context
-                            ).toInt()
-                        )
+                        if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            studentRecycler.layoutManager!!.scrollToPosition(
+                                PreferenceManager.getScrollPos(
+                                    context
+                                ).toInt()
+                            )
+                            PreferenceManager.setScrollPos(context, "")
+                        }
                     }
                     Log.e("size", studentArray.size.toString())
 
@@ -263,11 +269,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
 //                        Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
                         studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
-                        studentRecycler.layoutManager!!.scrollToPosition(
-                            PreferenceManager.getScrollPos(
-                                context
-                            ).toInt()
-                        )
+                        if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            studentRecycler.layoutManager!!.scrollToPosition(
+                                PreferenceManager.getScrollPos(
+                                    context
+                                ).toInt()
+                            )
+                            PreferenceManager.setScrollPos(context, "")
+                        }
                     } else {
 //                        if (studentArray.size > 10) {
 //                            val subArrayList = ArrayList(studentArray.subList(0, 10))
@@ -275,11 +284,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
 //                        }
                         studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
-                        studentRecycler.layoutManager!!.scrollToPosition(
-                            PreferenceManager.getScrollPos(
-                                context
-                            ).toInt()
-                        )
+                        if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            studentRecycler.layoutManager!!.scrollToPosition(
+                                PreferenceManager.getScrollPos(
+                                    context
+                                ).toInt()
+                            )
+                            PreferenceManager.setScrollPos(context, "")
+                        }
                     }
 
                 }
@@ -320,11 +332,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
 //                    Toast.makeText(context, "No students available", Toast.LENGTH_SHORT).show()
                     studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                     studentRecycler.adapter = studentAdapter
-                    studentRecycler.layoutManager!!.scrollToPosition(
-                        PreferenceManager.getScrollPos(
-                            context
-                        ).toInt()
-                    )
+                    if (!PreferenceManager.getScrollPos(context).equals("")) {
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
+                        PreferenceManager.setScrollPos(context, "")
+                    }
                 } else {
 //                    if (studentArray.size > 10) {
 //                        val subArrayList = ArrayList(studentArray.subList(0, 10))
@@ -333,11 +348,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     Log.e("student list size", studentArray.size.toString())
                     studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                     studentRecycler.adapter = studentAdapter
-                    studentRecycler.layoutManager!!.scrollToPosition(
-                        PreferenceManager.getScrollPos(
-                            context
-                        ).toInt()
-                    )
+                    if (!PreferenceManager.getScrollPos(context).equals("")) {
+                        studentRecycler.layoutManager!!.scrollToPosition(
+                            PreferenceManager.getScrollPos(
+                                context
+                            ).toInt()
+                        )
+                        PreferenceManager.setScrollPos(context, "")
+                    }
+
                 }
             }
 

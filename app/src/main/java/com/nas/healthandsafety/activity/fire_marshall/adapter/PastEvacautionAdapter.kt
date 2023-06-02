@@ -67,7 +67,11 @@ class PastEvacautionAdapter(
         val diffInMinutes = diffInSeconds / 60
         val diffInHours = diffInMinutes / 60
 
-        holder.evacuationTimeTaken.text = "$diffInMinutes min"
+        if (diffInMinutes < 0) {
+            holder.evacuationTimeTaken.text = "Ongoing"
+        } else {
+            holder.evacuationTimeTaken.text = "$diffInMinutes min"
+        }
 
 
         /*Log.e("designtion",employee_array.get(position).designation.toString())*/

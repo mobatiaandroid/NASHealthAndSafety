@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.gson.JsonObject
-import com.nas.healthandsafety.MainActivity
 import com.nas.healthandsafety.R
 import com.nas.healthandsafety.activity.fire_marshall.model.CommonResponseModel
 import com.nas.healthandsafety.activity.fire_marshall.model.EvacuationStartResponseModel
@@ -109,10 +108,8 @@ class FireMarshallHomeActivity : AppCompatActivity() {
 
 
         button1.setOnClickListener {
-            val intent = Intent(context, MainActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(0, 0)
-            finish()
+            Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+
         }
         button2.setOnClickListener {
             Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()

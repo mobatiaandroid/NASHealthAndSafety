@@ -209,7 +209,7 @@ class HomeActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
         }
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("E MMM dd yyyy")
+        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy")
         val currentDate = current.format(formatter)
         greetingSetter()
         date.text = currentDate
@@ -458,7 +458,7 @@ class HomeActivity : AppCompatActivity() {
                                         .load(studentArray[2].profile_photo_path)
                                         .into(imageC)
                                     countTextView.visibility = View.VISIBLE
-                                    countTextView.text = "$count+"
+                                    countTextView.text = "+$count"
                                 } else if (studentArray.size == 3) {
                                     Glide.with(context)
                                         .load(studentArray[0].profile_photo_path)
@@ -470,7 +470,7 @@ class HomeActivity : AppCompatActivity() {
                                         .load(studentArray[2].profile_photo_path)
                                         .into(imageC)
                                     countTextView.visibility = View.VISIBLE
-                                    countTextView.text = "$count+"
+                                    countTextView.text = "+$count"
                                 }else if (studentArray.size == 2) {
                                     Glide.with(context)
                                         .load(studentArray[0].profile_photo_path)

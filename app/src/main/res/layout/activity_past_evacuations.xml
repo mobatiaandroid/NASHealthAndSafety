@@ -16,6 +16,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/title_logo" />
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/arrow_back_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pastEvacuationsRecycler"
         android:layout_width="match_parent"

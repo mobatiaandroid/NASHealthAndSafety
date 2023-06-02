@@ -37,6 +37,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/icon_fire"
+                android:background="@drawable/icon_fire"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
