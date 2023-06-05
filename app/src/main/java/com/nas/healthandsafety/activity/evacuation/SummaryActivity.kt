@@ -81,32 +81,37 @@ class SummaryActivity : AppCompatActivity() {
                     notFoundStudentsCount = 0
                     currentClassCount = 0
                     otherClassCount = 0
+                    var className = ""
                     totalStudentsCount = snapshot.childrenCount.toInt()
                     for (i in snapshot.children) {
                         if (i.child("evacuated").value.toString() == "1") {
                             foundStudentsCount += 1
-
-                            if (!i.child("evacuated_assembly_points").value.toString()
-                                    .equals(i.child("student_assembly_points").value.toString())
-                            ) {
-                                otherClassCount += 1
-                            }
-
-
-                        }
-                        if (PreferenceManager.getClassName(context).contains(
-                                i.child("student_class_section").value.toString().replace(" ", "")
-                            )
-                        ) {
-                            if (i.child("evacuated_assembly_points").value.toString()
-                                    .equals(i.child("student_assembly_points").value.toString())
-                            ) {
+                            className = i.child("student_class_section").value.toString()
+                            if (PreferenceManager.getClassName(context).contains(className)) {
                                 currentClassCount += 1
                             }
+//                            if (!i.child("evacuated_assembly_points").value.toString()
+//                                    .equals(i.child("student_assembly_points").value.toString())
+//                            ) {
+//                                otherClassCount += 1
+//                            }
+
+
                         }
+//                        if (PreferenceManager.getClassName(context).contains(
+//                                i.child("student_class_section").value.toString().replace(" ", "")
+//                            )
+//                        ) {
+//                            if (i.child("evacuated_assembly_points").value.toString()
+//                                    .equals(i.child("student_assembly_points").value.toString())
+//                            ) {
+//                                currentClassCount += 1
+//                            }
+//                        }
 
                     }
                     notFoundStudentsCount = totalStudentsCount - foundStudentsCount
+                    otherClassCount = foundStudentsCount - currentClassCount
 //                    otherClassCount = totalStudentsCount - currentClassCount
                     totalStudentsTextView.text = totalStudentsCount.toString()
                     foundStudentsTextView.text = foundStudentsCount.toString()

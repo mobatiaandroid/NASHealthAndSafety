@@ -158,7 +158,7 @@ class SignInActivity : AppCompatActivity() {
             }
         }
         createAccount.setOnClickListener {
-            Toast.makeText(context,"Pressed", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context,"Pressed", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, CreateAccountActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0,0)
@@ -235,7 +235,7 @@ class SignInActivity : AppCompatActivity() {
             }
             override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
                 progressBarDialog!!.hide()
-                AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                AppUtils.showMessagePopUp(context, "Invalid Credentials")
             }
 
 

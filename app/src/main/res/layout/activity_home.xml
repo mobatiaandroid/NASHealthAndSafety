@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#FCFCFC"
+    android:background="@color/white"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.home.HomeActivity">
@@ -126,17 +126,26 @@
                 android:textSize="32dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toBottomOf="@+id/greeting" />
-            <androidx.cardview.widget.CardView
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_rectangle_white"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
                 app:layout_constraintTop_toBottomOf="@+id/staffName">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline9"
                         android:layout_width="wrap_content"
@@ -156,7 +165,6 @@
                         android:id="@+id/textView14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="TOTAL \nSTUDENTS"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -200,9 +208,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:visibility="gone"
                         android:text="TOTAL \nPRESENT"
                         android:textSize="14sp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toStartOf="@+id/guideline9"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/guideline10" />
@@ -212,8 +220,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:visibility="gone"
                         android:textSize="40dp"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/textView18"
                         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -222,6 +230,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Class Name"
+                        app:layout_constraintBottom_toTopOf="@+id/date"
                         app:layout_constraintStart_toStartOf="@+id/subjectName"
                         app:layout_constraintTop_toBottomOf="@+id/subjectName" />
 
@@ -230,9 +239,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12/03/2003"
-                        android:textColor="#b2b2b2"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toTopOf="@+id/imageA"
                         app:layout_constraintStart_toStartOf="@+id/className"
-                        app:layout_constraintTop_toTopOf="@+id/guideline10" />
+                        app:layout_constraintTop_toBottomOf="@+id/className" />
 
                     <ProgressBar
                         android:id="@+id/progressBarPresent"
@@ -260,9 +270,11 @@
                         android:id="@+id/imageA"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/date"
                         app:layout_constraintTop_toBottomOf="@+id/date"
                         app:srcCompat="@android:drawable/gallery_thumb" />
+
                     <ImageView
                         android:id="@+id/imageB"
                         android:layout_width="30dp"
@@ -271,6 +283,7 @@
                         app:layout_constraintStart_toEndOf="@+id/imageA"
                         app:layout_constraintTop_toBottomOf="@+id/date"
                         app:srcCompat="@android:drawable/gallery_thumb" />
+
                     <ImageView
                         android:id="@+id/imageC"
                         android:layout_width="30dp"
@@ -284,25 +297,25 @@
                         android:id="@+id/count"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:textSize="14sp"
-                        tools:text="+0"
-                        android:gravity="center"
-                        android:background="#EA3056"
                         android:layout_marginStart="4dp"
+                        android:background="#EA3056"
+                        android:gravity="center"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toEndOf="@+id/imageC"
-                        app:layout_constraintTop_toBottomOf="@+id/date" />
+                        app:layout_constraintTop_toBottomOf="@+id/date"
+                        tools:text="+0" />
 
                     <com.nas.healthandsafety.custom_fields.text_view.CustomFontTextViewSemiBoldBlack
                         android:id="@+id/subjectName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="8dp"
                         android:text="Subject"
+                        app:layout_constraintBottom_toTopOf="@+id/className"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/assemblyAreaSelector"
                 android:layout_width="0dp"

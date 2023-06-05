@@ -205,12 +205,14 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
                         if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                             studentRecycler.layoutManager!!.scrollToPosition(
                                 PreferenceManager.getScrollPos(
                                     context
                                 ).toInt()
                             )
                             PreferenceManager.setScrollPos(context, "")
+                            Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
                         }
                     } else {
 //                        if (studentArray.size > 10) {
@@ -220,12 +222,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
                         if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                             studentRecycler.layoutManager!!.scrollToPosition(
                                 PreferenceManager.getScrollPos(
                                     context
                                 ).toInt()
                             )
                             PreferenceManager.setScrollPos(context, "")
+                            Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
+
                         }
                     }
                     Log.e("size", studentArray.size.toString())
@@ -270,12 +275,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                         studentRecycler.adapter = studentAdapter
                         if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                             studentRecycler.layoutManager!!.scrollToPosition(
                                 PreferenceManager.getScrollPos(
                                     context
                                 ).toInt()
                             )
                             PreferenceManager.setScrollPos(context, "")
+                            Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
+
                         }
                     } else {
 //                        if (studentArray.size > 10) {
@@ -285,12 +293,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                         studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                         studentRecycler.adapter = studentAdapter
                         if (!PreferenceManager.getScrollPos(context).equals("")) {
+                            Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                             studentRecycler.layoutManager!!.scrollToPosition(
                                 PreferenceManager.getScrollPos(
                                     context
                                 ).toInt()
                             )
                             PreferenceManager.setScrollPos(context, "")
+                            Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
+
                         }
                     }
 
@@ -333,12 +344,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     studentAdapter = StudentAdapter(context, ArrayList(), studentRecycler)
                     studentRecycler.adapter = studentAdapter
                     if (!PreferenceManager.getScrollPos(context).equals("")) {
+                        Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                         studentRecycler.layoutManager!!.scrollToPosition(
                             PreferenceManager.getScrollPos(
                                 context
                             ).toInt()
                         )
                         PreferenceManager.setScrollPos(context, "")
+                        Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
+
                     }
                 } else {
 //                    if (studentArray.size > 10) {
@@ -349,12 +363,15 @@ class StudentEvacuationActivity : AppCompatActivity() {
                     studentAdapter = StudentAdapter(context, studentArray, studentRecycler)
                     studentRecycler.adapter = studentAdapter
                     if (!PreferenceManager.getScrollPos(context).equals("")) {
+                        Log.e("scroll pos", PreferenceManager.getScrollPos(context))
                         studentRecycler.layoutManager!!.scrollToPosition(
                             PreferenceManager.getScrollPos(
                                 context
                             ).toInt()
                         )
                         PreferenceManager.setScrollPos(context, "")
+                        Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
+
                     }
 
                 }

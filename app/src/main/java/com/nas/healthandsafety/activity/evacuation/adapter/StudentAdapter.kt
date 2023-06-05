@@ -56,16 +56,21 @@ class StudentAdapter(
 
         // Set the listener for the Switch state change
         holder.switchButton.setOnCheckedChangeListener { _, isChecked ->
-            PreferenceManager.setScrollPos(context, position.toString())
             val database = FirebaseDatabase.getInstance().reference
             val evacuatedRef = database.child("evacuation_students")
                 .child(PreferenceManager.getFireRef(context))
                 .child(studentArray[position].registrationID)
             evacuatedRef.child("evacuated").setValue(if (isChecked) 1 else 0)
             if (isChecked) {
+                PreferenceManager.setScrollPos(context, position.toString())
                 evacuatedRef.child("evacuated_assembly_points")
                     .setValue(PreferenceManager.getAssemblyPoint(context))
                 evacuatedRef.child("evacuated_by").setValue(PreferenceManager.getStaffName(context))
+            } else {
+                PreferenceManager.setScrollPos(context, position.toString())
+                evacuatedRef.child("evacuated_assembly_points")
+                    .setValue("")
+                evacuatedRef.child("evacuated_by").setValue("")
             }
 
 

@@ -40,7 +40,7 @@ class PastEvacuationsActivity : AppCompatActivity() {
         pastEvacuationsRecycler = findViewById(R.id.pastEvacuationsRecycler)
         progressBarDialog = ProgressBarDialog(context)
         backButton.setOnClickListener {
-            val intent = Intent(context, MarshallEvacuationActivity::class.java)
+            val intent = Intent(context, FireMarshallHomeActivity::class.java)
             startActivity(intent)
             overridePendingTransition(0, 0)
             finish()

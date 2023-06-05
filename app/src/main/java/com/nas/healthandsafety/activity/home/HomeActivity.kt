@@ -209,7 +209,7 @@ class HomeActivity : AppCompatActivity() {
             overridePendingTransition(0, 0)
         }
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy")
+        val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy")
         val currentDate = current.format(formatter)
         greetingSetter()
         date.text = currentDate
