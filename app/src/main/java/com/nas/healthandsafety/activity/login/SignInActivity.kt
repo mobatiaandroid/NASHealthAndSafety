@@ -106,7 +106,7 @@ class SignInActivity : AppCompatActivity() {
                         AppUtils.showMessagePopUp(context, "Enter a Valid Email.")
                     } else {
                         // call API
-                        Toast.makeText(context, "Account Recovery API", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
 //                        TODO
 //                        callAccountRecoveryAPI(emailID.text.toString())
                     }
@@ -189,7 +189,7 @@ class SignInActivity : AppCompatActivity() {
                 progressBarDialog!!.hide()
                 Log.e("status", response.toString())
                 if (response.body() == null) {
-                    AppUtils.showMessagePopUp(context, getString(R.string.text_unknown_error))
+                    AppUtils.showMessagePopUp(context, "Invalid Credentials")
                 } else {
                     if (!response.body()!!.equals("")) {
                         signInResponse = response.body()!!

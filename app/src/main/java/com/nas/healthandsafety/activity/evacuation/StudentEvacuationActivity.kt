@@ -85,7 +85,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
         currentClassTextView = findViewById(R.id.currentClassTextView)
         notFoundClassTextView = findViewById(R.id.notFoundClassTextView)
         viewSummaryButton = findViewById(R.id.viewSummaryButton)
-        currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
+        currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_grey_disabled)
         evacuationTitleTextView = findViewById(R.id.evacuationTitle)
         searchIcon = findViewById(R.id.searchIcon)
         searchView = findViewById(R.id.searchView)
@@ -172,7 +172,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
             finish()
         }
         currentClassTextView.setOnClickListener {
-            currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
+            currentClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_grey_disabled)
             notFoundClassTextView.setBackgroundResource(0)
             database.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -211,7 +211,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                     context
                                 ).toInt()
                             )
-                            PreferenceManager.setScrollPos(context, "")
+//                            PreferenceManager.setScrollPos(context, "")
                             Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
                         }
                     } else {
@@ -228,7 +228,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                     context
                                 ).toInt()
                             )
-                            PreferenceManager.setScrollPos(context, "")
+//                            PreferenceManager.setScrollPos(context, "")
                             Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
 
                         }
@@ -246,7 +246,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
         }
         notFoundClassTextView.setOnClickListener {
             currentClassTextView.setBackgroundResource(0)
-            notFoundClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_green_disabled)
+            notFoundClassTextView.setBackgroundResource(R.drawable.rounded_rectangle_grey_disabled)
             database.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -281,7 +281,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                     context
                                 ).toInt()
                             )
-                            PreferenceManager.setScrollPos(context, "")
+//                            PreferenceManager.setScrollPos(context, "")
                             Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
 
                         }
@@ -299,7 +299,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                     context
                                 ).toInt()
                             )
-                            PreferenceManager.setScrollPos(context, "")
+//                            PreferenceManager.setScrollPos(context, "")
                             Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
 
                         }
@@ -350,7 +350,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                 context
                             ).toInt()
                         )
-                        PreferenceManager.setScrollPos(context, "")
+//                        PreferenceManager.setScrollPos(context, "")
                         Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
 
                     }
@@ -369,7 +369,7 @@ class StudentEvacuationActivity : AppCompatActivity() {
                                 context
                             ).toInt()
                         )
-                        PreferenceManager.setScrollPos(context, "")
+//                        PreferenceManager.setScrollPos(context, "")
                         Log.e("scroll pos clear", PreferenceManager.getScrollPos(context))
 
                     }
